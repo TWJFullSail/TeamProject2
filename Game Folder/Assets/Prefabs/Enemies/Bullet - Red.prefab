@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 729016456426718019}
-  - component: {fileID: 3729321638967756329}
   - component: {fileID: 8233989026734482676}
   - component: {fileID: 6066441538307700817}
   - component: {fileID: 6275016922227283510}
@@ -35,25 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3729321638967756329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5847155271652780750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 163d0f576e9782944bec7ca4cc8733f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 0
-  rb: {fileID: 6066441538307700817}
-  damageAmt: 1
-  damageRate: 0
-  bulletSpeed: 25
-  bulletDestroyTime: 3
-  hitEffect: {fileID: 0}
 --- !u!135 &8233989026734482676
 SphereCollider:
   m_ObjectHideFlags: 0
