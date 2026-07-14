@@ -526,13 +526,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8112398099157542644}
-  - component: {fileID: 2920168710455092925}
+  - component: {fileID: -6082327167895539458}
   - component: {fileID: 6986632289804971165}
   - component: {fileID: 6515721808002073225}
   - component: {fileID: 2417267289540732642}
   - component: {fileID: 5798685388717263781}
   - component: {fileID: 7133218514645554687}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Enemy 1.0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -556,7 +556,7 @@ Transform:
   - {fileID: 4446749787455840186}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2920168710455092925
+--- !u!114 &-6082327167895539458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -565,19 +565,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7791680660320909169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c500901815ea2684da84bec3a1796ad8, type: 3}
+  m_Script: {fileID: 11500000, guid: 5921785029d8c7649baa3ad2029f6f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
-  model: {fileID: 6515721808002073225}
-  agent: {fileID: 7133218514645554687}
-  HP: 3
-  faceTargetSpeed: 5
+  model: {fileID: 0}
+  agent: {fileID: 0}
+  HP: 20
+  faceTargetSpeed: 2
   FOV: 45
-  bullet: {fileID: 5847155271652780750, guid: 1349da541972e694cbc1d5a88f14029f, type: 3}
-  gunPivot: {fileID: 4446749787455840186}
-  shootPos: {fileID: 4270699528705787131}
-  shootRate: 0.5
-  gunRotateSpeed: 3
+  roamDist: 0
+  roamPauseTime: 0
+  bullet: {fileID: 0}
+  gunPivot: {fileID: 0}
+  shootPos: {fileID: 0}
+  shootRate: 10
+  gunRotateSpeed: 2
 --- !u!33 &6986632289804971165
 MeshFilter:
   m_ObjectHideFlags: 0
