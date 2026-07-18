@@ -130,7 +130,10 @@ public class enemyAI : MonoBehaviour, IDamage
     void shoot()
     {
         shootTimer = 0;
-        Instantiate(bullet, shootPos.position, gunPivot.rotation);
+        if (bullet != null)
+        {
+            Instantiate(bullet, shootPos.position, gunPivot.rotation);
+        }
     }
 
     void rotateGun()

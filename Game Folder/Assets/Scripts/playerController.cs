@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 public class playerController : MonoBehaviour, IDamage
 {
@@ -29,7 +30,7 @@ public class playerController : MonoBehaviour, IDamage
     void Start()
     {
         HPOrig = HP;
-        updatePlayerUI();
+        spawnPlayer();
     }
 
     void Update()
@@ -59,7 +60,7 @@ public class playerController : MonoBehaviour, IDamage
         playerVel.y -= gravity * Time.deltaTime;
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > gunInv[gunInvPos].shootRate)
+        if (Input.GetButton("Fire1") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur > 0 && shootTimer > gunInv[gunInvPos].shootRate)
         {
 
             shoot();
@@ -71,6 +72,7 @@ public class playerController : MonoBehaviour, IDamage
         }
 
         selectGun();
+        reload();
     }
 
     void sprint()
@@ -97,13 +99,16 @@ public class playerController : MonoBehaviour, IDamage
     void shoot()
     {
         shootTimer = 0;
+        gunInv[gunInvPos].ammoCur--;
 
         RaycastHit hit;
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDist, ~ignoreLayer))
         {
 
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
+
+            Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
 
@@ -124,6 +129,14 @@ public class playerController : MonoBehaviour, IDamage
         {
             gamemanager.instance.youLose();
 
+        }
+    }
+
+    void reload()
+    {
+        if (Input.GetButtonDown("Reload") && gunInv.Count > 0)
+        {
+            gunInv[gunInvPos].ammoCur = gunInv[gunInvPos].ammoMax;
         }
     }
 
@@ -168,5 +181,13 @@ public class playerController : MonoBehaviour, IDamage
             gunInvPos--;
             changeGun();
         }
+    }
+
+    public void spawnPlayer()
+    {
+        controller.transform.position = gamemanager.instance.playerSpawnPos.transform.position;
+        Physics.SyncTransforms();
+        HP = HPOrig;
+        updatePlayerUI();
     }
 }
