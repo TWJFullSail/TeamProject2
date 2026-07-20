@@ -142,14 +142,20 @@ public class playerController : MonoBehaviour, IDamage
 
     public void updatePlayerUI()
     {
-        gamemanager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        if (gamemanager.instance.playerHPBar != null)
+        {
+            gamemanager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        }
     }
 
     IEnumerator flashDamage()
     {
-        gamemanager.instance.playerDamageScreen.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        gamemanager.instance.playerDamageScreen.SetActive(false);
+        if (gamemanager.instance.playerDamageScreen != null)
+        {
+            gamemanager.instance.playerDamageScreen.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            gamemanager.instance.playerDamageScreen.SetActive(false);
+        }
     }
 
     public void getGunStats(gunStats gun)
