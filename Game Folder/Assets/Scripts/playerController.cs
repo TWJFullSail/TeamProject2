@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-public class playerController : MonoBehaviour, IDamage, IPickupGun
+public class playerController : MonoBehaviour, IDamage, IPickupWeapon
 {
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreLayer;
@@ -16,9 +16,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [SerializeField] int gravity;
 
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
+    [SerializeField] List<weaponStats> weaponInv = new List<weaponStats>();
+    
     [SerializeField] GameObject gunModel;
 
-    [SerializeField] gunStats startingGun;
+    [SerializeField] weaponStats startingWeapon;
 
     int jumpCount;
     int HPOrig;
@@ -33,9 +35,9 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         HPOrig = HP;
 
-        if (startingGun != null)
+        if (startingWeapon != null)
         {
-            getGunStats(startingGun);
+            getWeaponStats(startingWeapon);
         }
 
         spawnPlayer();
@@ -196,5 +198,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         Physics.SyncTransforms();
         HP = HPOrig;
         updatePlayerUI();
+    }
+
+    public void getWeaponStats(weaponStats weapon)
+    {
+        weaponInv.Add(weapon);
     }
 }

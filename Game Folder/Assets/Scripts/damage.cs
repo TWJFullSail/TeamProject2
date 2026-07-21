@@ -3,10 +3,12 @@ using System.Collections;
 
 public class damage : MonoBehaviour
 {
-    enum damageType 
+    enum damageType
     {
         bullet,
         stationary,
+        AOE,
+        Rotate,
         DOT
     }
 

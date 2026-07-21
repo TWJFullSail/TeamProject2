@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879c8a33c58e1e44190bebabd82a6ad6, type: 3}
+  m_Name: Twin Blade (L)
+  m_EditorClassIdentifier: Assembly-CSharp::weaponStats
+  weaponModel: {fileID: 6763928684206017168, guid: c6a0cca9fe1ca014bbe99f313cdcaa83, type: 3}
+  type: 3
+  damage: 5
+  detectDist: 3
+  damageDist: 3
+  rate: 0.2
+  level: 1
+  lvlBonus: 0.25
+  hitEffect: {fileID: 5518644335834570940, guid: fa6ee2d47283d2547862367a4429bf95, type: 3}
+  sound: []
+  soundVol: 0
