@@ -18,6 +18,8 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
     [SerializeField] GameObject gunModel;
 
+    [SerializeField] gunStats startingGun;
+
     int jumpCount;
     int HPOrig;
     int gunInvPos;
@@ -30,9 +32,14 @@ public class playerController : MonoBehaviour, IDamage
     void Start()
     {
         HPOrig = HP;
+
+        if (startingGun != null)
+        {
+            getGunStats(startingGun);
+        }
+
         spawnPlayer();
     }
-
     void Update()
     {
         if (!gamemanager.instance.isPaused)
@@ -170,8 +177,12 @@ public class playerController : MonoBehaviour, IDamage
 
     void changeGun()
     {
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gunInv[gunInvPos].gunModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunInv[gunInvPos].gunModel.GetComponent<MeshRenderer>().sharedMaterial;
+        foreach (Transform child in gunModel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        Instantiate(gunInv[gunInvPos].gunModel, gunModel.transform);
     }
 
     void selectGun()
