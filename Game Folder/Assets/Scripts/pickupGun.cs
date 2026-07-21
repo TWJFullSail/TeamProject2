@@ -14,5 +14,4 @@ public class pickupGun : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }
