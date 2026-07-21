@@ -374,16 +374,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1104202541 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4335656883220472562, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-  m_PrefabInstance: {fileID: 4572609687013737854}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &1104202545 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 5217912763833021378, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-  m_PrefabInstance: {fileID: 4572609687013737854}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1174711774
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +405,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 860694382}
-  m_Father: {fileID: 1104202541}
+  m_Father: {fileID: 1925740092}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1174711776
 MonoBehaviour:
@@ -430,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGun
   gun: {fileID: 11400000, guid: 1651f4ba151ecab4b8dfcfddd34224ff, type: 2}
-  playerCamera: {fileID: 1104202545}
+  playerCamera: {fileID: 0}
   audioSource: {fileID: 0}
 --- !u!4 &1269934906 stripped
 Transform:
@@ -642,9 +632,9 @@ MonoBehaviour:
   - {fileID: 1901899798}
   - {fileID: 1701010834}
   - {fileID: 1269934906}
-  startingEnemies: 3
-  timeBetweenEnemies: 1
-  timeBetweenWaves: 5
+  startingEnemies: 5
+  timeBetweenEnemies: 2
+  timeBetweenWaves: 15
 --- !u!4 &1797123055
 Transform:
   m_ObjectHideFlags: 0
@@ -681,6 +671,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdc71d4c7c57884a901d0e9c34732fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::playerController
+--- !u!4 &1925740092 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5295424092584595779, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+  m_PrefabInstance: {fileID: 4572609687013737854}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1933662954
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,14 +926,14 @@ MonoBehaviour:
   menuWin: {fileID: 0}
   menuLose: {fileID: 0}
   gameGoalCountText: {fileID: 0}
+  checkpointPopup: {fileID: 0}
   isPaused: 0
   player: {fileID: 1925740090}
   playerScript: {fileID: 1925740091}
   playerHPBar: {fileID: 0}
   playerDamageScreen: {fileID: 0}
   playerSpawnPos: {fileID: 1647454085}
-  checkpointPopup: {fileID: 0}
-  gameGoalCount: 0
+  gameGoalCount: 5
 --- !u!4 &1947731009
 Transform:
   m_ObjectHideFlags: 0
@@ -2498,7 +2493,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4335656883220472562, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 5295424092584595779, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1174711775}
     m_AddedComponents: []

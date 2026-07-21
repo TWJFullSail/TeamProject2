@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
   model: {fileID: 8156353446904800070}
   agent: {fileID: 1082569128856422323}
-  HP: 50
+  HP: 5
   faceTargetSpeed: 10
   FOV: 90
   roamDist: 20
@@ -172,7 +172,7 @@ MonoBehaviour:
   bullet: {fileID: 4662509884338907027, guid: 3ac27164a4c5f304b8eae5c849bc1b63, type: 3}
   gunPivot: {fileID: 4245707111445446413}
   shootPos: {fileID: 3454122707932559082}
-  shootRate: 1
+  shootRate: 3
   gunRotateSpeed: 10
 --- !u!195 &1082569128856422323
 NavMeshAgent:
