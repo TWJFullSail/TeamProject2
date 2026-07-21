@@ -22,7 +22,7 @@ public class gamemanager : MonoBehaviour
 
     float timeScaleOrig;
 
-    int gameGoalCount;
+    public int gameGoalCount;
     void Awake()
     {
         instance = this;
@@ -72,15 +72,12 @@ public class gamemanager : MonoBehaviour
 
         if (gameGoalCountText != null)
         {
-            gameGoalCountText.text = gameGoalCount.ToString("F0");
+            gameGoalCountText.text = "Enemies Remaining: " + gameGoalCount;
         }
 
-        if (gameGoalCount <= 0)
+        if (gameGoalCount < 0)
         {
-            statePause();
-            menuActive = menuWin;
-            if (menuActive != null)
-                menuActive.SetActive(true);
+            gameGoalCount = 0;
         }
     }
     public void youLose()
