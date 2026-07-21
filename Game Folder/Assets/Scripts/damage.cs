@@ -3,64 +3,77 @@ using System.Collections;
 
 public class damage : MonoBehaviour
 {
+    enum damageType 
+    {
+        bullet,
+        stationary,
+        DOT
+    }
 
-    enum damageType { bullet, stationary, DOT }
     [SerializeField] damageType type;
     [SerializeField] Rigidbody rb;
 
-    [SerializeField] int damageAmount;
+    [SerializeField] int damageAmt;
     [SerializeField] float damageRate;
     [SerializeField] int bulletSpeed;
     [SerializeField] int bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
     bool isDamaging;
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (type == damageType.bullet)
+        if(type == damageType.bullet)
         {
             rb.linearVelocity = transform.forward * bulletSpeed;
             Destroy(gameObject, bulletDestroyTime);
-        }
+        }        
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") || other.transform.root == transform.root) { 
+        if (other.CompareTag("Enemy") || other.transform.root == transform.root)
+        {
 
-            return; 
+            return;
         }
-
+        
         IDamage dmg = other.GetComponent<IDamage>();
         if (dmg != null && type != damageType.DOT)
         {
-            dmg.takeDamage(damageAmount);
+            dmg.takeDamage(damageAmt);
         }
 
-        if (type == damageType.bullet)
+        if(type == damageType.bullet)
         {
-            if (hitEffect != null)
+            if(hitEffect != null)
             {
                 Instantiate(hitEffect, transform.position, Quaternion.identity);
             }
+
             Destroy(gameObject);
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.isTrigger)
         {
             return;
         }
+            
         IDamage dmg = other.GetComponent<IDamage>();
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
             StartCoroutine(damageOther(dmg));
         }
     }
+
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.takeDamage(damageAmount);
+        d.takeDamage(damageAmt);
         yield return new WaitForSeconds(damageRate);
         isDamaging = false;
     }
