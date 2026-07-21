@@ -164,15 +164,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
   model: {fileID: 8156353446904800070}
   agent: {fileID: 1082569128856422323}
-  HP: 50
+  HP: 5
   faceTargetSpeed: 10
-  FOV: 90
+  FOV: 180
   roamDist: 20
   roamPauseTime: 2
   bullet: {fileID: 4662509884338907027, guid: 3ac27164a4c5f304b8eae5c849bc1b63, type: 3}
   gunPivot: {fileID: 4245707111445446413}
   shootPos: {fileID: 3454122707932559082}
-  shootRate: 1
+  shootRate: 3
   gunRotateSpeed: 10
 --- !u!195 &1082569128856422323
 NavMeshAgent:
@@ -188,7 +188,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 3.5
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -215,7 +215,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 20
+  m_Radius: 50
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8538504034936426518
 GameObject:
