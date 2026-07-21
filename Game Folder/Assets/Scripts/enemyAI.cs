@@ -51,6 +51,11 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             checkRoam();
         }
+
+        Debug.DrawLine(shootPos.position,
+               shootPos.position + Vector3.up,
+               Color.blue);
+
     }
 
     void checkRoam()
@@ -79,42 +84,12 @@ public class enemyAI : MonoBehaviour, IDamage
         agent.SetDestination(hit.position);
 
     }
-
-    bool canSeePlayer()
-    {
-        shootTimer += Time.deltaTime;
-        playerDir = gamemanager.instance.player.transform.position - transform.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(transform.position, playerDir);
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, playerDir, out hit))
-        {
-            agent.SetDestination(gamemanager.instance.player.transform.position);
-
-            rotateGun();
-            faceTarget();
-
-            if (shootTimer >= shootRate)
-            {
-                shoot();
-            }
-
-            agent.stoppingDistance = stoppingDistOrig;
-            return true;
-        }
-
-        agent.stoppingDistance = 0;
-        return false;
-    }
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             playerInTrigger = true;
+            Debug.Log("Player ENTERED trigger");
         }
     }
 
@@ -123,25 +98,10 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
+            Debug.Log("Player LEFT trigger");
             agent.stoppingDistance = 0;
         }
     }
-
-    void shoot()
-    {
-        shootTimer = 0;
-        if (bullet != null)
-        {
-            Instantiate(bullet, shootPos.position, gunPivot.rotation);
-        }
-    }
-
-    void rotateGun()
-    {
-        Quaternion rot = Quaternion.LookRotation(playerDir);
-        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
-    }
-
     void faceTarget()
     {
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
@@ -168,5 +128,75 @@ public class enemyAI : MonoBehaviour, IDamage
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
+    }
+
+    bool canSeePlayer()
+    {
+        shootTimer += Time.deltaTime;
+
+        CharacterController cc = gamemanager.instance.player.GetComponent<CharacterController>();
+
+        Vector3 aimPoint = cc.bounds.center;
+
+        playerDir = aimPoint - shootPos.position;
+
+        if (playerDir.sqrMagnitude < 0.01f)
+            return false;
+
+        Debug.DrawRay(shootPos.position, playerDir.normalized * 40f, Color.red);
+
+
+        RaycastHit hit;
+        if (Physics.Raycast( shootPos.position, playerDir.normalized, out hit, playerDir.magnitude, ~0, QueryTriggerInteraction.Ignore))
+        {
+            Debug.Log("Ray hit: " + hit.collider.name);
+
+            if (hit.transform.root == transform.root)
+                return false;
+
+            if (hit.collider.CompareTag("Player"))
+            {
+                agent.SetDestination(gamemanager.instance.player.transform.position);
+                rotateGun();
+                faceTarget();
+
+                if (shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+
+                agent.stoppingDistance = stoppingDistOrig > 0 ? stoppingDistOrig : 8f;
+                return true;
+            }
+        }
+
+        agent.stoppingDistance = 0;
+        return false;
+    }
+
+    void rotateGun()
+    {
+        if (playerDir.sqrMagnitude < 0.01f) return;
+
+        Quaternion rot = Quaternion.LookRotation(playerDir);
+        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
+    }
+
+    void shoot()
+    {
+        shootTimer = 0;
+        if (bullet != null)
+        {
+            GameObject newBullet = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(playerDir));
+
+            Collider bulletCol = newBullet.GetComponent<Collider>();
+            if (bulletCol != null)
+            {
+                foreach (Collider col in GetComponentsInChildren<Collider>())
+                {
+                    Physics.IgnoreCollision(bulletCol, col);
+                }
+            }
+        }
     }
 }

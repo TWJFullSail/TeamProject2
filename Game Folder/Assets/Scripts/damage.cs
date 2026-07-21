@@ -25,9 +25,9 @@ public class damage : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.isTrigger)
-        {
-            return;
+        if (other.CompareTag("Enemy") || other.transform.root == transform.root) { 
+
+            return; 
         }
 
         IDamage dmg = other.GetComponent<IDamage>();

@@ -53,6 +53,9 @@ public class gamemanager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        if (menuActive != null)
+            menuActive.SetActive(true);
     }
     public void stateUnpause()
     {
@@ -66,13 +69,18 @@ public class gamemanager : MonoBehaviour
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
-        gameGoalCountText.text = gameGoalCount.ToString("F0");
+
+        if (gameGoalCountText != null)
+        {
+            gameGoalCountText.text = gameGoalCount.ToString("F0");
+        }
 
         if (gameGoalCount <= 0)
         {
             statePause();
             menuActive = menuWin;
-            menuActive.SetActive(true);
+            if (menuActive != null)
+                menuActive.SetActive(true);
         }
     }
     public void youLose()
