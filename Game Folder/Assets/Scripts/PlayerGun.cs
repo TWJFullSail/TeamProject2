@@ -48,16 +48,8 @@ public class PlayerGun : MonoBehaviour
         RaycastHit hit;
 
 
-        if (Physics.Raycast(
-            playerCamera.transform.position,
-            playerCamera.transform.forward,
-            out hit,
-            gun.shootDist))
+        if (Physics.Raycast( playerCamera.transform.position, playerCamera.transform.forward, out hit, gun.shootDist))
         {
-
-            Debug.Log("Hit: " + hit.collider.name);
-
-
             IDamage damageable = hit.collider.GetComponent<IDamage>();
 
             if (damageable != null)
@@ -68,16 +60,10 @@ public class PlayerGun : MonoBehaviour
 
             if (gun.hitEffect != null)
             {
-                Instantiate(
-                    gun.hitEffect,
-                    hit.point,
-                    Quaternion.LookRotation(hit.normal)
-                );
+                Instantiate(gun.hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
     }
-
-
     void PlayShootSound()
     {
         if (gun.shootSound.Length > 0)

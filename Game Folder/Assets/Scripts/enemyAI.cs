@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 public class enemyAI : MonoBehaviour, IDamage
 {
@@ -60,7 +61,7 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             roamTimer += Time.deltaTime;
 
-            if(roamTimer > roamPauseTime)
+            if(roamTimer >= roamPauseTime)
             {
                 roam();
             }
@@ -84,7 +85,6 @@ public class enemyAI : MonoBehaviour, IDamage
         if(other.CompareTag("Player"))
         {
             playerInTrigger = true;
-            agent.stoppingDistance = 0;
         }
     }
 
@@ -93,6 +93,8 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
+            agent.stoppingDistance = 0;
+
         }
     }
     void faceTarget()
@@ -136,10 +138,9 @@ public class enemyAI : MonoBehaviour, IDamage
         playerDir = aimPoint - shootPos.position;
 
         if (playerDir.sqrMagnitude < 0.01f)
+        {
             return false;
-
-        Debug.DrawRay(shootPos.position, playerDir.normalized * 40f, Color.red);
-
+        }
 
         RaycastHit hit;
         if (Physics.Raycast(shootPos.position, playerDir.normalized, out hit, playerDir.magnitude, ~0, QueryTriggerInteraction.Ignore))
@@ -194,8 +195,4 @@ public class enemyAI : MonoBehaviour, IDamage
             }
         }
     }
-
-
-
-
 }

@@ -42,7 +42,7 @@ public class gamemanager : MonoBehaviour
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else if (menuActive == menuPause)
+            else 
             {
                 stateUnpause();
             }
@@ -55,6 +55,10 @@ public class gamemanager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        if (menuActive != null)
+        {
+            menuActive.SetActive(true);
+        }
     }
     public void stateUnpause()
     {
@@ -69,14 +73,16 @@ public class gamemanager : MonoBehaviour
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
-        gameGoalCountText.text = gameGoalCount.ToString("F0");
 
-        if (gameGoalCount <= 0)
+        if (gameGoalCountText != null)
         {
-            // you win
-            statePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
+            gameGoalCountText.text = "Enemies Remaining: " + gameGoalCount;
+        }
+
+        if (gameGoalCount < 0)
+        {
+            gameGoalCount = 0;
+
         }
     }
 
