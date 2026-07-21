@@ -28,7 +28,7 @@ public class enemyAI : MonoBehaviour, IDamage
     float shootTimer;
     float angleToPlayer;
     float roamTimer;
-    float stoppingDistOrg;
+    float stoppingDistOrig;
 
     bool playerInTrigger;
 
@@ -38,7 +38,7 @@ public class enemyAI : MonoBehaviour, IDamage
         colorOrig = model.material.color;
         gamemanager.instance.updateGameGoal(1);
         startingPos = transform.position;
-        stoppingDistOrg = agent.stoppingDistance;
+        stoppingDistOrig = agent.stoppingDistance;
     }
 
     // Update is called once per frame
@@ -79,39 +79,6 @@ public class enemyAI : MonoBehaviour, IDamage
         NavMesh.SamplePosition(ranPos, out hit, roamDist, 1);
         agent.SetDestination(hit.position);
     }
-
-    bool canSeePlayer()
-    { 
-        shootTimer += Time.deltaTime;
-        playerDir = gamemanager.instance.player.transform.position - transform.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(transform.position, playerDir);
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, playerDir, out hit)) 
-        {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
-            {
-                agent.SetDestination(gamemanager.instance.player.transform.position);
-
-                rotateGun();
-                faceTarget();
-
-                if (shootTimer >= shootRate)
-                {
-                    shoot();
-                }
-
-                agent.stoppingDistance = stoppingDistOrg;
-                return true;
-            }
-        }
-
-        agent.stoppingDistance = 0;
-        return false;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
@@ -128,22 +95,6 @@ public class enemyAI : MonoBehaviour, IDamage
             playerInTrigger = false;
         }
     }
-
-    void shoot()
-    {
-        shootTimer = 0;
-        if (bullet != null)
-        {
-            Instantiate(bullet, shootPos.position, gunPivot.rotation);
-        }            
-    }
-
-    void rotateGun()
-    {
-        Quaternion rot = Quaternion.LookRotation(playerDir);
-        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot,gunRotateSpeed * Time.deltaTime);
-    }
-
     void faceTarget()
     {
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
@@ -172,4 +123,79 @@ public class enemyAI : MonoBehaviour, IDamage
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
     }
+
+
+    bool canSeePlayer()
+    {
+        shootTimer += Time.deltaTime;
+
+        CharacterController cc = gamemanager.instance.player.GetComponent<CharacterController>();
+
+        Vector3 aimPoint = cc.bounds.center;
+
+        playerDir = aimPoint - shootPos.position;
+
+        if (playerDir.sqrMagnitude < 0.01f)
+            return false;
+
+        Debug.DrawRay(shootPos.position, playerDir.normalized * 40f, Color.red);
+
+
+        RaycastHit hit;
+        if (Physics.Raycast(shootPos.position, playerDir.normalized, out hit, playerDir.magnitude, ~0, QueryTriggerInteraction.Ignore))
+        {
+            Debug.Log("Ray hit: " + hit.collider.name);
+
+            if (hit.transform.root == transform.root)
+                return false;
+
+            if (hit.collider.CompareTag("Player"))
+            {
+                agent.SetDestination(gamemanager.instance.player.transform.position);
+                rotateGun();
+                faceTarget();
+
+                if (shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+
+                agent.stoppingDistance = stoppingDistOrig > 0 ? stoppingDistOrig : 8f;
+                return true;
+            }
+        }
+
+        agent.stoppingDistance = 0;
+        return false;
+    }
+
+    void rotateGun()
+    {
+        if (playerDir.sqrMagnitude < 0.01f) return;
+
+        Quaternion rot = Quaternion.LookRotation(playerDir);
+        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
+    }
+
+    void shoot()
+    {
+        shootTimer = 0;
+        if (bullet != null)
+        {
+            GameObject newBullet = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(playerDir));
+
+            Collider bulletCol = newBullet.GetComponent<Collider>();
+            if (bulletCol != null)
+            {
+                foreach (Collider col in GetComponentsInChildren<Collider>())
+                {
+                    Physics.IgnoreCollision(bulletCol, col);
+                }
+            }
+        }
+    }
+
+
+
+
 }
