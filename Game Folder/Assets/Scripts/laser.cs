@@ -14,7 +14,7 @@ public class laser : MonoBehaviour
 
     bool isDamaging;
 
-    void Update()
+    private void Update()
     {
         createLaser();
     }
@@ -24,7 +24,6 @@ public class laser : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(laserStartPos.position, laserStartPos.forward, out hit, laserDistMax))
         {
-
             laserLine.SetPosition(0, laserStartPos.position);
             laserLine.SetPosition(1, hit.point);
             hitEffect.SetActive(true);
@@ -35,13 +34,12 @@ public class laser : MonoBehaviour
             {
                 StartCoroutine(damageTime(dmg));
             }
-            else
-            {
-                laserLine.SetPosition(0, laserStartPos.position);
-                laserLine.SetPosition(1, laserStartPos.position + laserStartPos.forward * laserDistMax);
-                hitEffect.SetActive(false);
-            }
-
+        }
+        else
+        {
+            laserLine.SetPosition(0, laserStartPos.position);
+            laserLine.SetPosition(1, laserStartPos.position + laserStartPos.forward * laserDistMax);
+            hitEffect.SetActive(false);
         }
     }
 
@@ -52,5 +50,4 @@ public class laser : MonoBehaviour
         yield return new WaitForSeconds(damageRate);
         isDamaging = false;
     }
-
 }
