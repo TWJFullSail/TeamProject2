@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class pickupWeapon : MonoBehaviour
 {
+    [SerializeField] GameObject prefab;
     [SerializeField] weaponStats weapon;
 
     private void OnTriggerEnter(Collider other)
@@ -9,7 +10,7 @@ public class pickupWeapon : MonoBehaviour
         IPickupWeapon pic = other.GetComponent<IPickupWeapon>();
         if (pic != null)
         {
-            pic.getWeaponStats(weapon);
+            pic.getWeaponStats(prefab, weapon);
             Destroy(gameObject);
         }
     }

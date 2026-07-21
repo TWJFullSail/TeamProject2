@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 879c8a33c58e1e44190bebabd82a6ad6, type: 3}
-  m_Name: Twin Blade (R)
+  m_Name: Whirlwind Disk
   m_EditorClassIdentifier: Assembly-CSharp::weaponStats
-  weaponModel: {fileID: 6763928684206017168, guid: c6a0cca9fe1ca014bbe99f313cdcaa83, type: 3}
-  type: 3
-  damage: 5
-  detectDist: 3
-  damageDist: 3
-  rate: 0.2
+  weaponModel: {fileID: 6299032609212688657, guid: 171c4662df50a3e45b06b0ce20609fce, type: 3}
+  type: 0
+  stance: 0
+  damage: 1
+  detectDist: 1
+  damageDist: 2
+  rate: 0.25
   level: 1
-  lvlBonus: 0.25
-  hitEffect: {fileID: 5518644335834570940, guid: fa6ee2d47283d2547862367a4429bf95, type: 3}
+  lvlBonus: 0.1
+  hitEffect: {fileID: 2573629263112366481, guid: a8724c2df04a0204cbf8c6f3cc450a51, type: 3}
   sound: []
   soundVol: 0
