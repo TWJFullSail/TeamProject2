@@ -128,7 +128,6 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         if (Input.GetButtonDown("Reload") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur < gunInv[gunInvPos].ammoMax)
         {
             gunInv[gunInvPos].ammoCur = gunInv[gunInvPos].ammoMax;
-            updateAmmoUI();
         }
     }
 
