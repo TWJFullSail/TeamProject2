@@ -36,7 +36,7 @@ public class enemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrig = model.material.color;
-        gameManager.instance.updateGameGoal(1);
+        gamemanager.instance.updateGameGoal(1);
         startingPos = transform.position;
         stoppingDistOrg = agent.stoppingDistance;
     }
@@ -44,7 +44,7 @@ public class enemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        if (playerInTrigger  && canSeePlayer())
+        if (playerInTrigger && canSeePlayer())
         {
 
         }
@@ -83,7 +83,7 @@ public class enemyAI : MonoBehaviour, IDamage
     bool canSeePlayer()
     { 
         shootTimer += Time.deltaTime;
-        playerDir = gameManager.instance.player.transform.position - transform.position;
+        playerDir = gamemanager.instance.player.transform.position - transform.position;
         angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
         Debug.DrawRay(transform.position, playerDir);
@@ -93,7 +93,7 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                agent.SetDestination(gameManager.instance.player.transform.position);
+                agent.SetDestination(gamemanager.instance.player.transform.position);
 
                 rotateGun();
                 faceTarget();
@@ -153,11 +153,11 @@ public class enemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        agent.SetDestination(gameManager.instance.player.transform.position);
+        agent.SetDestination(gamemanager.instance.player.transform.position);
 
         if (HP <= 0)
         {
-            gameManager.instance.updateGameGoal(-1);
+            gamemanager.instance.updateGameGoal(-1);
             Destroy(gameObject);
         } 
         else

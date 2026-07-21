@@ -11,6 +11,7 @@ public class gamemanager : MonoBehaviour
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
     [SerializeField] TMP_Text gameGoalCountText;
+    public GameObject checkpointPopup;
 
     public bool isPaused;
     public GameObject player;
@@ -18,11 +19,11 @@ public class gamemanager : MonoBehaviour
     public Image playerHPBar;
     public GameObject playerDamageScreen;
     public GameObject playerSpawnPos;
-    public GameObject checkpointPopup;
 
     float timeScaleOrig;
 
-    public int gameGoalCount;
+    int gameGoalCount;
+
     void Awake()
     {
         instance = this;
@@ -41,21 +42,19 @@ public class gamemanager : MonoBehaviour
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else
+            else if (menuActive == menuPause)
             {
                 stateUnpause();
             }
         }
     }
+
     public void statePause()
     {
         isPaused = true;
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
-        if (menuActive != null)
-            menuActive.SetActive(true);
     }
     public void stateUnpause()
     {
@@ -66,20 +65,21 @@ public class gamemanager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = null;
     }
+
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
+        gameGoalCountText.text = gameGoalCount.ToString("F0");
 
-        if (gameGoalCountText != null)
+        if (gameGoalCount <= 0)
         {
-            gameGoalCountText.text = "Enemies Remaining: " + gameGoalCount;
-        }
-
-        if (gameGoalCount < 0)
-        {
-            gameGoalCount = 0;
+            // you win
+            statePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
         }
     }
+
     public void youLose()
     {
         statePause();
