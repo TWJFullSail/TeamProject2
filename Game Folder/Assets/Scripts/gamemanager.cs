@@ -22,7 +22,7 @@ public class gamemanager : MonoBehaviour
 
     float timeScaleOrig;
 
-    int gameGoalCount;
+    public int gameGoalCount;
 
     void Awake()
     {
