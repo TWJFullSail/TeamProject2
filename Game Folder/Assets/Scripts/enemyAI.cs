@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using Unity.VisualScripting;
+
 
 public class enemyAI : MonoBehaviour, IDamage
 {
@@ -84,29 +84,33 @@ public class enemyAI : MonoBehaviour, IDamage
     {
         shootTimer += Time.deltaTime;
         playerDir = gamemanager.instance.player.transform.position - transform.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+        angleToPlayer = Vector3.Angle(playerDir, transform.forward);                                // checks if the player is inside the enemy's field of view
 
         Debug.DrawRay(transform.position, playerDir);
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, playerDir, out hit))
         {
-            agent.SetDestination(gamemanager.instance.player.transform.position);
-
-            rotateGun();
-            faceTarget();
-
-            if (shootTimer >= shootRate)
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)                  // confirms there is a clear path to the player
             {
-                shoot();
-            }
+                agent.SetDestination(gamemanager.instance.player.transform.position);
 
-            agent.stoppingDistance = stoppingDistOrig;
-            return true;
+                rotateGun();
+                faceTarget();
+
+                if (shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+
+                agent.stoppingDistance = stoppingDistOrig;
+                return true;
+            }
         }
 
-        agent.stoppingDistance = 0;
-        return false;
+         agent.stoppingDistance = 0;
+         return false;
+       
     }
 
 

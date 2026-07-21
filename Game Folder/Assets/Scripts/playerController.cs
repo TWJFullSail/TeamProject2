@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
-public class playerController : MonoBehaviour, IDamage
+
+public class playerController : MonoBehaviour, IDamage, IPickupGun
 {
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreLayer;
@@ -38,9 +38,10 @@ public class playerController : MonoBehaviour, IDamage
         if (!gamemanager.instance.isPaused)
         {
             movement();
+            sprint();
         }
 
-        sprint();
+        
     }
 
     void movement()
