@@ -23,6 +23,8 @@ public class gamemanager : MonoBehaviour
     float timeScaleOrig;
 
     int gameGoalCount;
+    bool isFinalWave = true;
+
     void Awake()
     {
         instance = this;
@@ -31,6 +33,7 @@ public class gamemanager : MonoBehaviour
         playerScript = player.GetComponent<playerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
+
     void Update()
     {
         if (Input.GetButtonDown("Cancel"))
@@ -47,6 +50,7 @@ public class gamemanager : MonoBehaviour
             }
         }
     }
+
     public void statePause()
     {
         isPaused = true;
@@ -54,6 +58,7 @@ public class gamemanager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
+
     public void stateUnpause()
     {
         isPaused = false;
@@ -63,18 +68,48 @@ public class gamemanager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = null;
     }
+
+    public void startWave(int amount, bool finalWave)
+    {
+        gameGoalCount = Mathf.Max(0, amount);
+        isFinalWave = finalWave;
+
+        updateGameGoalText();										// displays the new wave's enemy total
+    }
+
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
-        gameGoalCountText.text = gameGoalCount.ToString("F0");
+        gameGoalCount = Mathf.Max(0, gameGoalCount);
 
-        if (gameGoalCount <= 0)
+        updateGameGoalText();
+
+        if (gameGoalCount <= 0 && isFinalWave)
         {
-            statePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
+            youWin();
         }
     }
+
+    public bool isGameGoalComplete()
+    {
+        return gameGoalCount <= 0;
+    }
+
+    void updateGameGoalText()
+    {
+        if (gameGoalCountText != null)
+        {
+            gameGoalCountText.text = gameGoalCount.ToString("F0");
+        }
+    }
+
+    public void youWin()
+    {
+        statePause();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+    }
+
     public void youLose()
     {
         statePause();
