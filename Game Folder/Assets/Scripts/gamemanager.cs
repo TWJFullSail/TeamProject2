@@ -74,6 +74,8 @@ public class gamemanager : MonoBehaviour
     {
         gameGoalCount += amount;
 
+        Debug.Log($"Game Goal Count = {gameGoalCount}");
+
         if (gameGoalCountText != null)
         {
             gameGoalCountText.text = "Enemies Remaining: " + gameGoalCount;
@@ -82,7 +84,6 @@ public class gamemanager : MonoBehaviour
         if (gameGoalCount < 0)
         {
             gameGoalCount = 0;
-
         }
     }
 

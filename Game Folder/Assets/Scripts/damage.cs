@@ -3,36 +3,36 @@ using System.Collections;
 
 public class damage : MonoBehaviour
 {
-    enum damageType
-    {
-        bullet,
-        stationary,
-        AOE,
-        Rotate,
-        DOT
-    }
+    enum damageType { bullet, stationary, AOE, Rotate, DOT }
 
     [SerializeField] damageType type;
     [SerializeField] Rigidbody rb;
 
     [SerializeField] int damageAmt;
     [SerializeField] float damageRate;
-    [SerializeField] int bulletSpeed;
-    [SerializeField] int bulletDestroyTime;
+    [SerializeField] float bulletSpeed;
+    [SerializeField] float bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
     bool isDamaging;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(type == damageType.bullet)
+        if (type == damageType.bullet)
         {
-            rb.linearVelocity = transform.forward * bulletSpeed;
+            if (rb != null)
+            {
+                rb.angularVelocity = transform.forward * bulletSpeed;
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: Rigidbody not assigned on bullet.");
+            }
+
             Destroy(gameObject, bulletDestroyTime);
-        }        
+        }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy") || other.transform.root == transform.root)
