@@ -40,6 +40,12 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenWaves);
 
             currentWave++;
+
+            while (gamemanager.instance.gameGoalCount > 0)
+            {
+                Debug.Log("Enemies Remaining: " + gamemanager.instance.gameGoalCount);
+                yield return null;
+            }
         }
     }
 

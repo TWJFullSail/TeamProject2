@@ -22,8 +22,8 @@ public class damage : MonoBehaviour
     [SerializeField] int damageAmt;
     [SerializeField] float damageRate;
     [SerializeField] bool destroyOnHit;
-    [SerializeField] int bulletSpeed;
-    [SerializeField] int bulletDestroyTime;
+    [SerializeField] float bulletSpeed;
+    [SerializeField] float bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
     bool isDamaging;
@@ -35,7 +35,7 @@ public class damage : MonoBehaviour
     bool canPierce;
     string targetTag = "Enemy";
 
-    GameObject projectilePrefab;
+
     Transform firePoint;
     bool targetAtPosition;
     float detectionRadius;
@@ -95,7 +95,7 @@ public class damage : MonoBehaviour
 
     void Start()
     {
-        if (weapon != null)
+        if(type == damageType.bullet)
         {
             type = (damageType)weapon.dType;
             damageAmt = weapon.dmgAmt;
