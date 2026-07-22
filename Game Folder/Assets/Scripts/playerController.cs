@@ -283,7 +283,9 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         currentGun = gunInv[gunInvPos];
         gunModel.GetComponent<MeshFilter>().sharedMesh = currentGun.gunModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = currentGun.gunModel.GetComponent<MeshRenderer>().sharedMaterial;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterials = currentGun.gunModel.GetComponent<MeshRenderer>().sharedMaterials;
+        gunModel.transform.localScale = currentGun.gunModel.transform.localScale;
+
         updateAmmoUI();
     }
 
