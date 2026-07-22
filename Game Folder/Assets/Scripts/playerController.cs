@@ -185,10 +185,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if (Input.GetButtonDown("Reload") && currentGun != null && currentGun.ammoCur < currentGun.clipSize && currentGun.ammoTotal > 0)
         {
-            if (currentGun.ammoTotal > currentGun.clipSize)
+            int missing = currentGun.clipSize - currentGun.ammoCur;
+            if (currentGun.ammoTotal > missing)
             {
-                currentGun.ammoTotal -= currentGun.clipSize;
-                currentGun.ammoCur = currentGun.clipSize;
+                currentGun.ammoTotal -= missing;
+                currentGun.ammoCur += missing;
             }
             else
             {

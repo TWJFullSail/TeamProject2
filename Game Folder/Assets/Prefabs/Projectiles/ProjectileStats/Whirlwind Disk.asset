@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponModel: {fileID: 6299032609212688657, guid: 171c4662df50a3e45b06b0ce20609fce, type: 3}
   stance: 0
   type: 0
-  dType: 4
+  dType: 3
   dmgAmt: 5
   dmgRate: 0.5
   destroyedOnHit: 0

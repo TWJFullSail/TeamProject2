@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::projectile
   speed: 15
+  duration: 1.5
 --- !u!33 &-6236362561539194574
 MeshFilter:
   m_ObjectHideFlags: 0
