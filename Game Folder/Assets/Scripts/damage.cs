@@ -94,8 +94,8 @@ public class damage : MonoBehaviour
     public void DisableBounceMode() { bounceMode = false; }
 
     void Start()
-    {
-        if(type == damageType.bullet)
+    {        
+        if(weapon != null)
         {
             type = (damageType)weapon.dType;
             damageAmt = weapon.dmgAmt;
@@ -174,7 +174,6 @@ public class damage : MonoBehaviour
     {
         if (other.isTrigger)
         {
-            Debug.Log("huh");
             return;
         }
 

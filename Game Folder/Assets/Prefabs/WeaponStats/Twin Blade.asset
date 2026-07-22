@@ -18,7 +18,7 @@ MonoBehaviour:
   dType: 3
   dmgAmt: 5
   dmgRate: 0.1
-  destroyedOnHit: 0
+  destroyedOnHit: 1
   canPierce: 0
   targetTag: Enemy
   projectileSpd: 1
