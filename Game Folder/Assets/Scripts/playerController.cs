@@ -5,39 +5,53 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static weaponStats;
 
-public class playerController : MonoBehaviour, IDamage, IPickupWeapon
+public class playerController : MonoBehaviour, IDamage, IPickupGun
 {
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreLayer;
 
-    [SerializeField] int HP;
-    [SerializeField] int speed;
-    [SerializeField] int sprintMod;
-    [SerializeField] int jumpSpeed;
-    [SerializeField] int jumpMax;
-    [SerializeField] int gravity;
+    [Range(0, 500)][SerializeField] int HP;
+    [Range(0, 100)][SerializeField] int Stamina;
+    [Range(1, 20)][SerializeField] float StaminaRate;
+    [Range(1, 50)][SerializeField] int speed;
+    [Range(1, 10)][SerializeField] int sprintMod;
+    [Range(1, 50)][SerializeField] int jumpSpeed;
+    [Range(1, 3)][SerializeField] int jumpMax;
+    [Range(10, 100)][SerializeField] int gravity;
     
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
-    [SerializeField] List<GameObject> weaponInv = new List<GameObject>();
-
-
     [SerializeField] GameObject gunModel;
+    [SerializeField] gunStats startingGun;
+
+    [SerializeField] AudioClip[] audJump;
+    [Range(0, 1)][SerializeField] float audJumpVol;
+    [SerializeField] AudioClip[] audHurt;
+    [Range(0, 1)][SerializeField] float audHurtVol;
+    [SerializeField] AudioClip[] audSteps;
+    [Range(0, 1)][SerializeField] float audStepsVol;
+
+    //Old idea for "Bullet Heaven multiple weapon system abandoned
+    /*
+    [SerializeField] List<GameObject> weaponInv = new List<GameObject>();    
     [SerializeField] Transform aura;
     [SerializeField] Transform arms;
     [SerializeField] Transform rangeWeapon;
     [SerializeField] Transform passive;
-
-    [SerializeField] gunStats startingGun;
-
     HashSet<stanceType> stanceInv = new HashSet<stanceType>();
     [SerializeField] List<weaponStats> statInv = new List<weaponStats>();
+    int stanceInvPos;
+    /**/
 
     int jumpCount;
     int HPOrig;
-    int stanceInvPos;
+    int StaminaOrig;    
     int gunInvPos;
-
     float shootTimer;
+    float staminaRecoverTimer;
+    float staminaLoseTimer;
+
+    bool isSprinting;
+    bool isPlayingSteps;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -45,6 +59,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     void Start()
     {
         HPOrig = HP;
+        StaminaOrig = Stamina;
 
         if (startingGun != null)
         {
@@ -58,8 +73,6 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         if (!gamemanager.instance.isPaused)
         {
             movement();
-
-            sprint();
         }
     }
 
@@ -69,14 +82,27 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         {
             playerVel.y = 0;
             jumpCount = 0;
+
+            if (moveDir.magnitude > 0.3f && !isPlayingSteps)
+            {
+                StartCoroutine(playSteps());
+            }
         }
 
         moveDir = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
         controller.Move(moveDir.normalized * speed * Time.deltaTime);
 
+        sprint();
         jump();
         controller.Move(playerVel * Time.deltaTime);
         playerVel.y -= gravity * Time.deltaTime;
+        staminaRecoverTimer += Time.deltaTime;
+        if(staminaRecoverTimer > StaminaRate && Stamina < StaminaOrig)
+        {
+            Stamina += 10;
+            updatePlayerStamina();
+            staminaRecoverTimer = 0;
+        }
 
         shootTimer += Time.deltaTime;
         if (Input.GetButton("Fire1") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur > 0 && shootTimer > gunInv[gunInvPos].shootRate)
@@ -84,37 +110,53 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
             shoot();
         }
 
-        /*
-        if (gunInv.Count > 0)
-        {
-            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * gunInv[gunInvPos].shootDist, Color.red);
-        }
-        /**/
-
-        //selectGun();
-        /*
-         * In this game we aren't selecting a gun, but rather switching stances and changing the player's entire weapon set.
-        /**/
-        changeStance();
+        selectGun();
         reload();
     }
 
     void sprint()
     {
-        if(Input.GetButtonDown("Sprint")) {
+        if(Input.GetButtonDown("Sprint") && Stamina > 0) {
             speed *= sprintMod;
+            staminaRecoverTimer = 0;
+            staminaLoseTimer += Time.deltaTime;
+            if (staminaLoseTimer > 0.2f)
+            {
+                Stamina--;
+                updatePlayerStamina();
+            }
         }
         else if(Input.GetButtonUp("Sprint")) {
             speed /= sprintMod;
         }
     }
 
+    IEnumerator playSteps()
+    {
+        isPlayingSteps = true;
+
+        audioManager.instance.audPlayer.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+
+        if (isSprinting)
+        {
+            yield return new WaitForSeconds(0.3f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+        isPlayingSteps = false;
+    }
+
     void jump()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
+        staminaRecoverTimer = 0;
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && Stamina > 10)
         {
             playerVel.y = jumpSpeed;
             jumpCount++;
+            Stamina -= 10;
+            updatePlayerStamina();
         }
     }
 
@@ -122,6 +164,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     {
         shootTimer = 0;
         gunInv[gunInvPos].ammoCur--;
+        audioManager.instance.audPlayer.PlayOneShot(gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)], gunInv[gunInvPos].shootSoundVol);
+        updateAmmoUI();
 
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDist, ~ignoreLayer))
@@ -145,28 +189,45 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         if (Input.GetButtonDown("Reload") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur < gunInv[gunInvPos].ammoMax)
         {
             gunInv[gunInvPos].ammoCur = gunInv[gunInvPos].ammoMax;
+            updateAmmoUI();
         }
     }
 
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updatePlayerUI();
+        audioManager.instance.audPlayer.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+        updatePlayerHP();
         StartCoroutine(flashDamage());
 
         if(HP <= 0)
         {
             gamemanager.instance.youLose();
-
         }
     }
 
     public void updatePlayerUI()
     {
-        if (gamemanager.instance.playerHPBar != null)
-        {
-            gamemanager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        }
+        updatePlayerHP();
+        updatePlayerStamina();
+        updateAmmoUI();        
+    }
+
+    public void updatePlayerHP()
+    {
+        gamemanager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        gamemanager.instance.playerHPText.text = HP.ToString("F00") + " / " + HPOrig.ToString("F00");
+    }
+
+    public void updatePlayerStamina()
+    {
+        gamemanager.instance.playerStaminaBar.fillAmount = (float)Stamina / StaminaOrig;
+        gamemanager.instance.playerStaminaText.text = Stamina.ToString("F00") + " / " + StaminaOrig.ToString("F00");
+    }
+
+    public void updateAmmoUI()
+    {
+        gamemanager.instance.ammoText.text = gunInv[gunInvPos].ammoCur.ToString("F0") + " / " + gunInv[gunInvPos].ammoMax.ToString("F0");
     }
 
     IEnumerator flashDamage()
@@ -191,6 +252,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     {
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunInv[gunInvPos].gunModel.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunInv[gunInvPos].gunModel.GetComponent<MeshRenderer>().sharedMaterial;
+        updateAmmoUI();
     }
 
     void selectGun()
@@ -212,8 +274,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         controller.transform.position = gamemanager.instance.playerSpawnPos.transform.position;
         Physics.SyncTransforms();
         HP = HPOrig;
+        Stamina = StaminaOrig;
         updatePlayerUI();
     }
+
+    /*
 
     public void getWeaponStats(GameObject prefab, weaponStats weapon)
     {
@@ -302,4 +367,5 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
             changeWeapon();
         }
     }
+    /**/
 }

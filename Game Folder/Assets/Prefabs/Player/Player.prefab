@@ -84,21 +84,41 @@ MonoBehaviour:
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 8
-  HP: 10
+  HP: 200
+  Stamina: 0
+  StaminaRate: 1
   speed: 5
   sprintMod: 3
   jumpSpeed: 12
   jumpMax: 2
   gravity: 35
   gunInv: []
-  weaponInv: []
   gunModel: {fileID: 1979613610231290795}
-  aura: {fileID: 0}
-  arms: {fileID: 0}
-  rangeWeapon: {fileID: 0}
-  passive: {fileID: 0}
   startingGun: {fileID: 11400000, guid: 1651f4ba151ecab4b8dfcfddd34224ff, type: 2}
-  statInv: []
+  audJump:
+  - {fileID: 8300000, guid: 5972d99c0e46da7418617ac782005cf8, type: 3}
+  - {fileID: 8300000, guid: ff47832ac5ba27b499d0fae161d46335, type: 3}
+  - {fileID: 8300000, guid: c5a6ea366311461458f551dea3243858, type: 3}
+  audJumpVol: 0.3
+  audHurt:
+  - {fileID: 8300000, guid: 40284573c6912af48a63ab185ab4f453, type: 3}
+  - {fileID: 8300000, guid: 1014922e5140cf448a9b28d0eead23bb, type: 3}
+  - {fileID: 8300000, guid: f54dd228f2d3f3b4db64d7f24a771a71, type: 3}
+  - {fileID: 8300000, guid: 67cabcc2d7ff99b46823f6bd54a2a286, type: 3}
+  - {fileID: 8300000, guid: d05fa848c2a0193468bddc18ad37a7dd, type: 3}
+  - {fileID: 8300000, guid: dc85349079b920c4b910e59b9edee3be, type: 3}
+  audHurtVol: 0.4
+  audSteps:
+  - {fileID: 8300000, guid: b585b3fe9c9f01f458a4f28533d93041, type: 3}
+  - {fileID: 8300000, guid: cc31df02c78b92a43a7a7eb9dd15d9b2, type: 3}
+  - {fileID: 8300000, guid: a548c9209850c234c85e07f294f8465b, type: 3}
+  - {fileID: 8300000, guid: d2f02439639b1e54aa3363178cedbad2, type: 3}
+  - {fileID: 8300000, guid: 6220e55ef229f5c49aa59f914c16bf61, type: 3}
+  - {fileID: 8300000, guid: 269e2a060c46a9d41bd616a409ce023c, type: 3}
+  - {fileID: 8300000, guid: 3efbb852f475ad34eae8a61d839a3c5e, type: 3}
+  - {fileID: 8300000, guid: a76b87d29cb385f468299d4a7f24b370, type: 3}
+  - {fileID: 8300000, guid: ecd55514b5fc1e543a8de1bf8fa0c261, type: 3}
+  audStepsVol: 0.3
 --- !u!143 &8139457096622479270
 CharacterController:
   m_ObjectHideFlags: 0

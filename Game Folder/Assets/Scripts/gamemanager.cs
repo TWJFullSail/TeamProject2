@@ -17,6 +17,12 @@ public class gamemanager : MonoBehaviour
     public GameObject player;
     public playerController playerScript;
     public Image playerHPBar;
+    public Image playerStaminaBar;
+
+    public TMP_Text ammoText;
+    public TMP_Text totalAmmoText;
+    public TMP_Text playerHPText;
+    public TMP_Text playerStaminaText;
     public GameObject playerDamageScreen;
     public GameObject playerSpawnPos;
 
