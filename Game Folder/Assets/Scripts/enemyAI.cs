@@ -84,7 +84,7 @@ public class enemyAI : MonoBehaviour, IDamage
         damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
 
         HP = Mathf.Max(1,
-            Mathf.RoundToInt(HPOrig * healthMultiplier));					// applies the current wave's health increase
+            Mathf.RoundToInt(HPOrig * healthMultiplier));                   // applies the current wave's health increase
 
         waveDamageMultiplier = damageMultiplier;
 
@@ -106,7 +106,6 @@ public class enemyAI : MonoBehaviour, IDamage
                 waveDamageMultiplier);
         }
     }
-
     bool agentReady()
     {
         return agent != null &&
