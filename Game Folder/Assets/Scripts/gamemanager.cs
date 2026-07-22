@@ -11,19 +11,24 @@ public class gamemanager : MonoBehaviour
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
     [SerializeField] TMP_Text gameGoalCountText;
+    public GameObject checkpointPopup;
 
     public bool isPaused;
     public GameObject player;
     public playerController playerScript;
     public Image playerHPBar;
+    public Image playerStaminaBar;
+
+    public TMP_Text ammoText;
+    public TMP_Text totalAmmoText;
+    public TMP_Text playerHPText;
+    public TMP_Text playerStaminaText;
     public GameObject playerDamageScreen;
     public GameObject playerSpawnPos;
-    public GameObject checkpointPopup;
 
     float timeScaleOrig;
 
-    int gameGoalCount;
-    bool isFinalWave = true;
+    public int gameGoalCount;
 
     void Awake()
     {
@@ -33,7 +38,6 @@ public class gamemanager : MonoBehaviour
         playerScript = player.GetComponent<playerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
-
     void Update()
     {
         if (Input.GetButtonDown("Cancel"))
@@ -44,7 +48,7 @@ public class gamemanager : MonoBehaviour
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else
+            else if (menuActive == menuPause)
             {
                 stateUnpause();
             }
@@ -69,45 +73,18 @@ public class gamemanager : MonoBehaviour
         menuActive = null;
     }
 
-    public void startWave(int amount, bool finalWave)
-    {
-        gameGoalCount = Mathf.Max(0, amount);
-        isFinalWave = finalWave;
-
-        updateGameGoalText();										// displays the new wave's enemy total
-    }
-
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
-        gameGoalCount = Mathf.Max(0, gameGoalCount);
+        gameGoalCountText.text = gameGoalCount.ToString("F0");
 
-        updateGameGoalText();
-
-        if (gameGoalCount <= 0 && isFinalWave)
+        if (gameGoalCount <= 0)
         {
-            youWin();
+            // you win
+            statePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
         }
-    }
-
-    public bool isGameGoalComplete()
-    {
-        return gameGoalCount <= 0;
-    }
-
-    void updateGameGoalText()
-    {
-        if (gameGoalCountText != null)
-        {
-            gameGoalCountText.text = gameGoalCount.ToString("F0");
-        }
-    }
-
-    public void youWin()
-    {
-        statePause();
-        menuActive = menuWin;
-        menuActive.SetActive(true);
     }
 
     public void youLose()

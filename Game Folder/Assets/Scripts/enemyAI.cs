@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 public class enemyAI : MonoBehaviour, IDamage
 {
@@ -13,13 +14,12 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] int roamDist;
     [SerializeField] int roamPauseTime;
 
+
     [SerializeField] GameObject bullet;
     [SerializeField] Transform gunPivot;
     [SerializeField] Transform shootPos;
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
-
-    int HPOrig;																// stores the prefab's original health
 
     Color colorOrig;
 
@@ -30,44 +30,29 @@ public class enemyAI : MonoBehaviour, IDamage
     float angleToPlayer;
     float roamTimer;
     float stoppingDistOrig;
-    float waveDamageMultiplier = 1;
 
     bool playerInTrigger;
-    bool hasReportedDeath;
 
-    void Awake()
-    {
-        HPOrig = HP;
-    }
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (model != null)
-        {
-            colorOrig = model.material.color;
-        }
-
-        startingPos = transform.position;
+        //Debug.Log($"{name} | Agent assigned: {agent != null}");
 
         if (agent != null)
         {
-            stoppingDistOrig = agent.stoppingDistance;
+            //Debug.Log($"{name} | Enabled: {agent.enabled}");
+            //Debug.Log($"{name} | On NavMesh: {agent.isOnNavMesh}");
         }
+
+        colorOrig = model.material.color;
+        gamemanager.instance.updateGameGoal(1);
+        startingPos = transform.position;
+        stoppingDistOrig = agent.stoppingDistance;
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (!agentReady())													// prevents NavMesh calls before the agent is ready
-        {
-            return;
-        }
-
-        if (gamemanager.instance == null ||
-            gamemanager.instance.player == null)
-        {
-            return;
-        }
-
         if (playerInTrigger && canSeePlayer())
         {
 
@@ -78,53 +63,13 @@ public class enemyAI : MonoBehaviour, IDamage
         }
     }
 
-    public void setWaveStats(float healthMultiplier, float damageMultiplier)
-    {
-        healthMultiplier = Mathf.Max(0.01f, healthMultiplier);
-        damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
-
-        HP = Mathf.Max(1,
-            Mathf.RoundToInt(HPOrig * healthMultiplier));                   // applies the current wave's health increase
-
-        waveDamageMultiplier = damageMultiplier;
-
-        enemyContactDamage[] contactDamageScripts =
-            GetComponentsInChildren<enemyContactDamage>(true);
-
-        for (int i = 0; i < contactDamageScripts.Length; i++)
-        {
-            contactDamageScripts[i].setDamageMultiplier(
-                waveDamageMultiplier);
-        }
-
-        damage[] damageScripts =
-            GetComponentsInChildren<damage>(true);
-
-        for (int i = 0; i < damageScripts.Length; i++)
-        {
-            damageScripts[i].setDamageMultiplier(
-                waveDamageMultiplier);
-        }
-    }
-    bool agentReady()
-    {
-        return agent != null &&
-               agent.enabled &&
-               agent.isOnNavMesh;
-    }
-
     void checkRoam()
     {
-        if (agent.pathPending)
-        {
-            return;
-        }
-
-        if (agent.remainingDistance < 0.01f)
+        if(agent.remainingDistance < 0.01f)
         {
             roamTimer += Time.deltaTime;
 
-            if (roamTimer >= roamPauseTime)
+            if(roamTimer >= roamPauseTime)
             {
                 roam();
             }
@@ -140,63 +85,12 @@ public class enemyAI : MonoBehaviour, IDamage
         ranPos += startingPos;
 
         NavMeshHit hit;
-
-        if (NavMesh.SamplePosition(
-            ranPos, out hit, roamDist, NavMesh.AllAreas))					// confirms the random point is on a NavMesh
-        {
-            agent.SetDestination(hit.position);
-        }
+        NavMesh.SamplePosition(ranPos, out hit, roamDist, 1);
+        agent.SetDestination(hit.position);
     }
-
-    bool canSeePlayer()
-    {
-        shootTimer += Time.deltaTime;
-
-        playerDir =
-            gamemanager.instance.player.transform.position -
-            transform.position;
-
-        angleToPlayer =
-            Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(transform.position, playerDir, Color.red);
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(
-            transform.position,
-            playerDir.normalized,
-            out hit,
-            playerDir.magnitude))
-        {
-            if (hit.collider.CompareTag("Player") &&
-                angleToPlayer <= FOV)										// checks line of sight and field of view
-            {
-                agent.SetDestination(
-                    gamemanager.instance.player.transform.position);
-
-                rotateGun();
-                faceTarget();
-
-                if (shootTimer >= shootRate)
-                {
-                    shoot();
-                }
-
-                agent.stoppingDistance = stoppingDistOrig;
-
-                return true;
-            }
-        }
-
-        agent.stoppingDistance = 0;
-
-        return false;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if(other.CompareTag("Player"))
         {
             playerInTrigger = true;
         }
@@ -207,125 +101,113 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
+            agent.stoppingDistance = 0;
 
-            if (agentReady())
+        }
+    }
+    void faceTarget()
+    {
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, faceTargetSpeed * Time.deltaTime);
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        agent.SetDestination(gamemanager.instance.player.transform.position);
+
+        if (HP <= 0)
+        {
+            gamemanager.instance.updateGameGoal(-1);
+            Destroy(gameObject);
+        } 
+        else
+        {
+            StartCoroutine(flashRed());
+        }
+    }
+
+    IEnumerator flashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
+    }
+
+
+    bool canSeePlayer()
+    {
+        shootTimer += Time.deltaTime;
+
+        CharacterController cc = gamemanager.instance.player.GetComponent<CharacterController>();
+
+        Vector3 aimPoint = cc.bounds.center;
+
+        playerDir = aimPoint - shootPos.position;
+
+        if (playerDir.sqrMagnitude < 0.01f)
+        {
+            return false;
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(shootPos.position, playerDir.normalized, out hit, playerDir.magnitude, ~0, QueryTriggerInteraction.Ignore))
+        {
+            //Debug.Log("Ray hit: " + hit.collider.name);
+
+            if (hit.transform.root == transform.root)
+                return false;
+
+            if (hit.collider.CompareTag("Player"))
             {
-                agent.stoppingDistance = 0;
+                if (agent != null && agent.enabled && agent.isOnNavMesh)
+                {
+                    agent.SetDestination(gamemanager.instance.player.transform.position);
+                }
+                else
+                {
+                    //Debug.LogError($"{name}: NavMeshAgent is not on a NavMesh!");
+                }
+                rotateGun();
+                faceTarget();
+
+                if (shootTimer >= shootRate)
+                {
+                    shoot();
+                }
+
+                agent.stoppingDistance = stoppingDistOrig > 0 ? stoppingDistOrig : 8f;
+                return true;
             }
         }
+
+        agent.stoppingDistance = 0;
+        return false;
+    }
+
+    void rotateGun()
+    {
+        if (playerDir.sqrMagnitude < 0.01f) return;
+
+        Quaternion rot = Quaternion.LookRotation(playerDir);
+        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
     }
 
     void shoot()
     {
         shootTimer = 0;
-
-        if (bullet == null ||
-            shootPos == null ||
-            gunPivot == null)
+        if (bullet != null)
         {
-            return;
-        }
+            GameObject newBullet = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(playerDir));
 
-        GameObject bulletInstance =
-            Instantiate(
-                bullet,
-                shootPos.position,
-                gunPivot.rotation);
-
-        damage bulletDamage =
-            bulletInstance.GetComponent<damage>();
-
-        if (bulletDamage == null)
-        {
-            bulletDamage =
-                bulletInstance.GetComponentInChildren<damage>();
-        }
-
-        if (bulletDamage != null)
-        {
-            bulletDamage.setDamageMultiplier(
-                waveDamageMultiplier);										// applies the wave damage to the new projectile
-        }
-    }
-
-    void rotateGun()
-    {
-        if (gunPivot == null)
-        {
-            return;
-        }
-
-        Quaternion rot = Quaternion.LookRotation(playerDir);
-
-        gunPivot.rotation = Quaternion.Lerp(
-            gunPivot.rotation,
-            rot,
-            gunRotateSpeed * Time.deltaTime);
-    }
-
-    void faceTarget()
-    {
-        Vector3 flatPlayerDir =
-            new Vector3(playerDir.x, 0, playerDir.z);
-
-        if (flatPlayerDir == Vector3.zero)
-        {
-            return;
-        }
-
-        Quaternion rot = Quaternion.LookRotation(flatPlayerDir);
-
-        transform.rotation = Quaternion.Lerp(
-            transform.rotation,
-            rot,
-            faceTargetSpeed * Time.deltaTime);
-    }
-
-    public void takeDamage(int amount)
-    {
-        if (hasReportedDeath)												// prevents the same enemy from being counted twice
-        {
-            return;
-        }
-
-        HP -= amount;
-
-        if (HP <= 0)
-        {
-            hasReportedDeath = true;
-
-            if (gamemanager.instance != null)
+            Collider bulletCol = newBullet.GetComponent<Collider>();
+            if (bulletCol != null)
             {
-                gamemanager.instance.updateGameGoal(-1);
+                foreach (Collider col in GetComponentsInChildren<Collider>())
+                {
+                    Physics.IgnoreCollision(bulletCol, col);
+                }
             }
-
-            Destroy(gameObject);
-
-            return;
         }
-
-        if (agentReady() &&
-            gamemanager.instance != null &&
-            gamemanager.instance.player != null)
-        {
-            agent.SetDestination(
-                gamemanager.instance.player.transform.position);
-        }
-
-        StartCoroutine(flashRed());
-    }
-
-    IEnumerator flashRed()
-    {
-        if (model == null)
-        {
-            yield break;
-        }
-
-        model.material.color = Color.red;
-
-        yield return new WaitForSeconds(0.1f);
-
-        model.material.color = colorOrig;
     }
 }

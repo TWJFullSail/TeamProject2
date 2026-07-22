@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd098954f815fe4a844f4f23d3476fc, type: 3}
+  m_Name: Blade Thrower
+  m_EditorClassIdentifier: Assembly-CSharp::gunStats
+  gunModel: {fileID: 3595098310066855455, guid: 560896b8eb5e68044985c64a9a80600c, type: 3}
+  projectile: {fileID: 3595098310066855455, guid: c18a86ba1b96aea4eb38ed31cfdb1bcd, type: 3}
+  shootDamage: 1
+  shootDist: 5
+  shootRate: 0.75
+  ammoCur: 0
+  ammoTotal: 0
+  clipSize: 5
+  clipMax: 5
+  hitEffect: {fileID: 0}
+  shootSound:
+  - {fileID: 8300000, guid: 10127beee06c6a74397177429d6ad0ef, type: 3}
+  shootSoundVol: 0.1
