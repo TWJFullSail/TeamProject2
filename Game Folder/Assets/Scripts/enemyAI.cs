@@ -145,7 +145,7 @@ public class enemyAI : MonoBehaviour, IDamage
         RaycastHit hit;
         if (Physics.Raycast(shootPos.position, playerDir.normalized, out hit, playerDir.magnitude, ~0, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log("Ray hit: " + hit.collider.name);
+            //Debug.Log("Ray hit: " + hit.collider.name);
 
             if (hit.transform.root == transform.root)
                 return false;

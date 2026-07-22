@@ -204,7 +204,10 @@ PrefabInstance:
       addedObject: {fileID: 9189845424898589241}
     - targetCorrespondingSourceObject: {fileID: 177005641604268635, guid: 05a90ee7f449db949a74c606eb214643, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7575342231056887247}
+      addedObject: {fileID: 6131724046958189084}
+    - targetCorrespondingSourceObject: {fileID: 177005641604268635, guid: 05a90ee7f449db949a74c606eb214643, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4131355120869837670}
   m_SourcePrefab: {fileID: 100100000, guid: 05a90ee7f449db949a74c606eb214643, type: 3}
 --- !u!1 &1924625078783465504 stripped
 GameObject:
@@ -223,14 +226,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8469e3362175e84db3deb23acf90a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::damage
+  weapon: {fileID: 11400000, guid: 35cd8aef3a83f734eabf9614f7b31593, type: 2}
   type: 3
-  rb: {fileID: 7575342231056887247}
+  rb: {fileID: 0}
   damageAmt: 0
   damageRate: 0
+  destroyOnHit: 0
   bulletSpeed: 0
   bulletDestroyTime: 0
   hitEffect: {fileID: 5518644335834570940, guid: fa6ee2d47283d2547862367a4429bf95, type: 3}
---- !u!54 &7575342231056887247
+--- !u!136 &6131724046958189084
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924625078783465504}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &4131355120869837670
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -336,7 +364,10 @@ PrefabInstance:
       addedObject: {fileID: 7474527690912464022}
     - targetCorrespondingSourceObject: {fileID: 7471337672900840243, guid: 4124a17153f892c40867a28f06b4d1bd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1745063397632220706}
+      addedObject: {fileID: 2798684703051714523}
+    - targetCorrespondingSourceObject: {fileID: 7471337672900840243, guid: 4124a17153f892c40867a28f06b4d1bd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6532281932347484796}
   m_SourcePrefab: {fileID: 100100000, guid: 4124a17153f892c40867a28f06b4d1bd, type: 3}
 --- !u!1 &3693037771197402419 stripped
 GameObject:
@@ -355,14 +386,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8469e3362175e84db3deb23acf90a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::damage
+  weapon: {fileID: 11400000, guid: 35cd8aef3a83f734eabf9614f7b31593, type: 2}
   type: 3
-  rb: {fileID: 1745063397632220706}
+  rb: {fileID: 0}
   damageAmt: 0
   damageRate: 0
+  destroyOnHit: 0
   bulletSpeed: 0
   bulletDestroyTime: 0
   hitEffect: {fileID: 5518644335834570940, guid: fa6ee2d47283d2547862367a4429bf95, type: 3}
---- !u!54 &1745063397632220706
+--- !u!136 &2798684703051714523
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693037771197402419}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6532281932347484796
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

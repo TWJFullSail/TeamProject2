@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f774cb19298b740a585a4d0e59885e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::pickupWeapon
+  prefab: {fileID: 5478237379972570025, guid: 9f8284bdf86462c4882248beed2e3eeb, type: 3}
   weapon: {fileID: 11400000, guid: 00f735577e321e94eaaf5fc4eb058685, type: 2}
 --- !u!135 &-5076648920458219659
 SphereCollider:

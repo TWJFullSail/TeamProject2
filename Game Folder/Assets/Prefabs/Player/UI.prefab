@@ -2603,11 +2603,14 @@ MonoBehaviour:
   menuWin: {fileID: 2571357212842806023}
   menuLose: {fileID: 2458732708011254818}
   gameGoalCountText: {fileID: 2248429029369227005}
+  checkpointPopup: {fileID: 0}
   isPaused: 0
   player: {fileID: 0}
   playerScript: {fileID: 0}
-  playerHPBar: {fileID: 0}
+  playerHPBar: {fileID: 2324141046022885286}
   playerDamageScreen: {fileID: 0}
+  playerSpawnPos: {fileID: 0}
+  gameGoalCount: 0
 --- !u!1 &7726593554861312941
 GameObject:
   m_ObjectHideFlags: 0

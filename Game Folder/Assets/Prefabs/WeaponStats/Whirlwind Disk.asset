@@ -13,12 +13,28 @@ MonoBehaviour:
   m_Name: Whirlwind Disk
   m_EditorClassIdentifier: Assembly-CSharp::weaponStats
   weaponModel: {fileID: 6299032609212688657, guid: 171c4662df50a3e45b06b0ce20609fce, type: 3}
-  type: 0
   stance: 0
-  damage: 1
+  type: 0
+  dType: 4
+  dmgAmt: 1
+  dmgRate: 0.1
+  destroyedOnHit: 0
+  canPierce: 0
+  targetTag: Enemy
+  projectileSpd: 1
+  bulletDestroyTime: 1
+  pivot: {fileID: 0}
+  rotationSpeed: 0
+  recoilAngle: 45
+  meleeHitAngle: 0
+  recoilDuration: 0
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  targetAtPosition: 0
+  detectionRadius: 5
+  aoeBlastRadius: 0
   detectDist: 1
   damageDist: 2
-  rate: 0.25
   level: 1
   lvlBonus: 0.1
   hitEffect: {fileID: 2573629263112366481, guid: a8724c2df04a0204cbf8c6f3cc450a51, type: 3}
