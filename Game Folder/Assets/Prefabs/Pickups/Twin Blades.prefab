@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 387650794604462105}
-  - component: {fileID: 1640037239563168537}
   - component: {fileID: 7514632326141021399}
+  - component: {fileID: -5044736773617394913}
   m_Layer: 0
   m_Name: Twin Blades
   m_TagString: Untagged
@@ -35,20 +35,6 @@ Transform:
   - {fileID: 3587802300891374219}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1640037239563168537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853294109634429342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83f774cb19298b740a585a4d0e59885e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::pickupWeapon
-  prefab: {fileID: 3595098310066855455, guid: c18a86ba1b96aea4eb38ed31cfdb1bcd, type: 3}
-  weapon: {fileID: 11400000, guid: 35cd8aef3a83f734eabf9614f7b31593, type: 2}
 --- !u!135 &7514632326141021399
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -70,6 +56,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-5044736773617394913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8853294109634429342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da926ac20d1684744a3567c7a17d4c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::pickupGun
+  gun: {fileID: 11400000, guid: 518886c5304d994458873d56a02becfd, type: 2}
 --- !u!1001 &1747123201374849347
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bd098954f815fe4a844f4f23d3476fc, type: 3}
-  m_Name: Pistol
+  m_Name: BuzzSaw
   m_EditorClassIdentifier: Assembly-CSharp::gunStats
-  gunModel: {fileID: 919132149155446097, guid: 02d9b182281fee4418514b43e0d1b187, type: 3}
-  projectile: {fileID: 0}
+  gunModel: {fileID: 5478237379972570025, guid: 9f8284bdf86462c4882248beed2e3eeb, type: 3}
+  projectile: {fileID: 5478237379972570025, guid: 2c2dc43f07c5f9647bd6f430af17558a, type: 3}
   shootDamage: 1
-  shootDist: 25
-  shootRate: 0.3
-  ammoCur: 23
-  ammoTotal: 0
-  clipSize: 25
-  clipMax: 5
-  hitEffect: {fileID: 5584602140419805224, guid: bb9857cd060f47c4bbbacde1537c91a1, type: 3}
+  shootDist: 50
+  shootRate: 1.5
+  ammoCur: 4
+  ammoTotal: 10
+  clipSize: 5
+  clipMax: 3
+  hitEffect: {fileID: 0}
   shootSound:
-  - {fileID: 8300000, guid: 03173a45176bb0b459330ed603ef7c3b, type: 3}
-  shootSoundVol: 0
+  - {fileID: 8300000, guid: 70991fa5b87d16f44b27710a4d124b6f, type: 3}
+  shootSoundVol: 0.2

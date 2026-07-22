@@ -8,8 +8,7 @@ public class pickupGun : MonoBehaviour
     {
         IPickupGun pic = other.GetComponent<IPickupGun>();
         if (pic != null)
-        {
-            gun.ammoCur = gun.ammoMax;
+        {           
             pic.getGunStats(gun);
             Destroy(gameObject);
         }

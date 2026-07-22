@@ -10,33 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 879c8a33c58e1e44190bebabd82a6ad6, type: 3}
-  m_Name: Whirlwind Disk
+  m_Name: Twin Blade
   m_EditorClassIdentifier: Assembly-CSharp::weaponStats
-  weaponModel: {fileID: 6299032609212688657, guid: 171c4662df50a3e45b06b0ce20609fce, type: 3}
+  weaponModel: {fileID: 6763928684206017168, guid: c6a0cca9fe1ca014bbe99f313cdcaa83, type: 3}
   stance: 0
-  type: 0
-  dType: 4
-  dmgAmt: 1
+  type: 1
+  dType: 3
+  dmgAmt: 5
   dmgRate: 0.1
-  destroyedOnHit: 0
+  destroyedOnHit: 1
   canPierce: 0
   targetTag: Enemy
-  projectileSpd: 1
+  projectileSpd: 5
   bulletDestroyTime: 1
   pivot: {fileID: 0}
-  rotationSpeed: 0
+  rotationSpeed: 10
   recoilAngle: 45
   meleeHitAngle: 0
   recoilDuration: 0
   projectilePrefab: {fileID: 0}
   firePoint: {fileID: 0}
   targetAtPosition: 0
-  detectionRadius: 0
+  detectionRadius: 3
   aoeBlastRadius: 0
-  detectDist: 1
-  damageDist: 2
+  detectDist: 3
+  damageDist: 3
   level: 1
-  lvlBonus: 0.1
-  hitEffect: {fileID: 2573629263112366481, guid: a8724c2df04a0204cbf8c6f3cc450a51, type: 3}
-  sound: []
-  soundVol: 0
+  lvlBonus: 0.25
+  hitEffect: {fileID: 5518644335834570940, guid: fa6ee2d47283d2547862367a4429bf95, type: 3}
+  sound:
+  - {fileID: 8300000, guid: 70991fa5b87d16f44b27710a4d124b6f, type: 3}
+  soundVol: 0.4

@@ -13,7 +13,7 @@ public class PlayerGun : MonoBehaviour
 
     void Start()
     {
-        currentAmmo = gun.ammoMax;
+        currentAmmo = gun.clipSize;
     }
 
 
@@ -33,7 +33,7 @@ public class PlayerGun : MonoBehaviour
     {
         if (currentAmmo <= 0)
         {
-            Debug.Log("Out of ammo");
+            //Debug.Log("Out of ammo");
             return;
         }
 

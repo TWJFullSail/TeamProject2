@@ -10,18 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bd098954f815fe4a844f4f23d3476fc, type: 3}
-  m_Name: Pistol
+  m_Name: Pistol 3
   m_EditorClassIdentifier: Assembly-CSharp::gunStats
   gunModel: {fileID: 919132149155446097, guid: 02d9b182281fee4418514b43e0d1b187, type: 3}
   projectile: {fileID: 0}
   shootDamage: 1
   shootDist: 25
   shootRate: 0.3
-  ammoCur: 23
+  ammoCur: 0
   ammoTotal: 0
-  clipSize: 25
-  clipMax: 5
+  clipSize: 5
+  clipMax: 1
   hitEffect: {fileID: 5584602140419805224, guid: bb9857cd060f47c4bbbacde1537c91a1, type: 3}
-  shootSound:
-  - {fileID: 8300000, guid: 03173a45176bb0b459330ed603ef7c3b, type: 3}
+  shootSound: []
   shootSoundVol: 0

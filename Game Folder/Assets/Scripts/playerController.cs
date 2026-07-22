@@ -12,7 +12,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     [Range(0, 500)][SerializeField] int HP;
     [Range(0, 100)][SerializeField] int Stamina;
-    [Range(1, 20)][SerializeField] float StaminaRate;
+    [Range(1, 20)][SerializeField] int StaminaRate;
     [Range(1, 50)][SerializeField] int speed;
     [Range(1, 10)][SerializeField] int sprintMod;
     [Range(1, 50)][SerializeField] int jumpSpeed;
@@ -20,8 +20,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(10, 100)][SerializeField] int gravity;
     
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
+    gunStats currentGun;
     [SerializeField] GameObject gunModel;
-    [SerializeField] gunStats startingGun;
 
     [SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
@@ -45,10 +45,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     int jumpCount;
     int HPOrig;
     int StaminaOrig;    
-    int gunInvPos;
+    int gunInvPos = 0;
     float shootTimer;
-    float staminaRecoverTimer;
-    float staminaLoseTimer;
 
     bool isSprinting;
     bool isPlayingSteps;
@@ -60,19 +58,13 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         HPOrig = HP;
         StaminaOrig = Stamina;
-
-        if (startingGun != null)
-        {
-            getGunStats(startingGun);
-        }
-
         spawnPlayer();
     }
     void Update()
     {
         if (!gamemanager.instance.isPaused)
         {
-            movement();
+            movement();            
         }
     }
 
@@ -95,17 +87,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         sprint();
         jump();
         controller.Move(playerVel * Time.deltaTime);
-        playerVel.y -= gravity * Time.deltaTime;
-        staminaRecoverTimer += Time.deltaTime;
-        if(staminaRecoverTimer > StaminaRate && Stamina < StaminaOrig)
-        {
-            Stamina += 10;
-            updatePlayerStamina();
-            staminaRecoverTimer = 0;
-        }
+        playerVel.y -= gravity * Time.deltaTime;        
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur > 0 && shootTimer > gunInv[gunInvPos].shootRate)
+        if (Input.GetButton("Fire1") && gunInv.Count > 0 && currentGun.ammoCur > 0 && shootTimer > currentGun.shootRate)
         {
             shoot();
         }
@@ -118,16 +103,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if(Input.GetButtonDown("Sprint") && Stamina > 0) {
             speed *= sprintMod;
-            staminaRecoverTimer = 0;
-            staminaLoseTimer += Time.deltaTime;
-            if (staminaLoseTimer > 0.2f)
-            {
-                Stamina--;
-                updatePlayerStamina();
-            }
+            isSprinting = true;
         }
         else if(Input.GetButtonUp("Sprint")) {
             speed /= sprintMod;
+            isSprinting = false;
         }
     }
 
@@ -140,18 +120,27 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         if (isSprinting)
         {
             yield return new WaitForSeconds(0.3f);
+            if (Stamina > 0)
+            {
+                Stamina--;
+                updatePlayerStamina();
+            }
         }
         else
         {
             yield return new WaitForSeconds(0.5f);
+            if (Stamina < StaminaOrig)
+            {
+                Stamina += StaminaRate;
+                updatePlayerStamina();
+            }            
         }
         isPlayingSteps = false;
     }
 
     void jump()
     {
-        staminaRecoverTimer = 0;
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && Stamina > 10)
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && Stamina >= 10)
         {
             playerVel.y = jumpSpeed;
             jumpCount++;
@@ -163,32 +152,49 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     void shoot()
     {
         shootTimer = 0;
-        gunInv[gunInvPos].ammoCur--;
-        audioManager.instance.audPlayer.PlayOneShot(gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)], gunInv[gunInvPos].shootSoundVol);
+        currentGun.ammoCur--;
+        audioManager.instance.audPlayer.PlayOneShot(currentGun.shootSound[Random.Range(0, currentGun.shootSound.Length)], currentGun.shootSoundVol);
         updateAmmoUI();
 
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDist, ~ignoreLayer))
+        GameObject projectile = currentGun.projectile;
+        if (projectile != null)
         {
-            //Debug.Log(hit.collider.name);
-            if(gunInv[gunInvPos].hitEffect != null)
+            Instantiate(projectile, gunModel.transform.position + projectile.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, currentGun.shootDist, ~ignoreLayer))
             {
-                Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
-            }
+                //Debug.Log(hit.collider.name);
+                if (currentGun.hitEffect != null)
+                {
+                    Instantiate(currentGun.hitEffect, hit.point, Quaternion.identity);
+                }
 
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null) 
-            {
-                dmg.takeDamage(gunInv[gunInvPos].shootDamage);
+                IDamage dmg = hit.collider.GetComponent<IDamage>();
+                if (dmg != null)
+                {
+                    dmg.takeDamage(currentGun.shootDamage);
+                }
             }
         }
     }
 
     void reload()
     {
-        if (Input.GetButtonDown("Reload") && gunInv.Count > 0 && gunInv[gunInvPos].ammoCur < gunInv[gunInvPos].ammoMax)
+        if (Input.GetButtonDown("Reload") && currentGun != null && currentGun.ammoCur < currentGun.clipSize && currentGun.ammoTotal > 0)
         {
-            gunInv[gunInvPos].ammoCur = gunInv[gunInvPos].ammoMax;
+            if (currentGun.ammoTotal > currentGun.clipSize)
+            {
+                currentGun.ammoTotal -= currentGun.clipSize;
+                currentGun.ammoCur = currentGun.clipSize;
+            }
+            else
+            {
+                currentGun.ammoCur = currentGun.ammoTotal;
+                currentGun.ammoTotal = 0;
+            }
             updateAmmoUI();
         }
     }
@@ -227,7 +233,9 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     public void updateAmmoUI()
     {
-        gamemanager.instance.ammoText.text = gunInv[gunInvPos].ammoCur.ToString("F0") + " / " + gunInv[gunInvPos].ammoMax.ToString("F0");
+        gamemanager.instance.ammoText.text = currentGun.ammoCur.ToString("F0") + " / " + currentGun.clipSize.ToString("F0");
+        int maxAmmo = currentGun.clipSize * (currentGun.clipMax - 1);
+        gamemanager.instance.totalAmmoText.text = currentGun.ammoTotal.ToString("F0") + " / " + maxAmmo.ToString("F0");
     }
 
     IEnumerator flashDamage()
@@ -242,16 +250,39 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     public void getGunStats(gunStats gun)
     {
-        gunInv.Add(gun);
-        gunInvPos = gunInv.Count - 1;
+        bool isNew = true;
+        foreach (gunStats gs in gunInv)
+        {
+            if (gs.gunModel == gun.gunModel)
+            {
+                isNew = false;
+                int maxAmmo = gun.clipSize * (gun.clipMax - 1);
+                gs.ammoTotal += gun.clipSize;
 
-        changeGun();        
+                if (gs.ammoTotal > maxAmmo)
+                {
+                    gs.ammoTotal = maxAmmo;
+                }
+                updateAmmoUI();
+                break;
+            }
+        }
+
+        if (isNew)
+        {
+            gun.ammoCur = gun.clipSize;
+            gunInv.Add(gun);
+            gunInvPos = gunInv.Count - 1;
+
+            changeGun();
+        }
     }
 
     void changeGun()
     {
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gunInv[gunInvPos].gunModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunInv[gunInvPos].gunModel.GetComponent<MeshRenderer>().sharedMaterial;
+        currentGun = gunInv[gunInvPos];
+        gunModel.GetComponent<MeshFilter>().sharedMesh = currentGun.gunModel.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = currentGun.gunModel.GetComponent<MeshRenderer>().sharedMaterial;
         updateAmmoUI();
     }
 
@@ -275,6 +306,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         Physics.SyncTransforms();
         HP = HPOrig;
         Stamina = StaminaOrig;
+        currentGun = gunInv[gunInvPos];
+        currentGun.ammoCur = currentGun.clipSize;
         updatePlayerUI();
     }
 

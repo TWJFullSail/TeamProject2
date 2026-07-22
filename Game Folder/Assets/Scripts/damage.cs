@@ -176,38 +176,35 @@ public class damage : MonoBehaviour
         {
             return;
         }
-
+        Debug.Log(type);
         switch (type)
         {
             case damageType.bullet:
             case damageType.stationary:
             case damageType.AOE:
+            case damageType.melee:
                 IDamage dmg = other.GetComponent<IDamage>();
                 if (dmg != null)
                 {
-                    
+                    Debug.Log(damageAmt);
                     dmg.takeDamage(damageAmt);
                     if (type == damageType.bullet && !canPierce && destroyOnHit)
                     {
                         Destroy(gameObject);
-                    }
-                        
+                    }                        
                 }
                 break;
-
-            case damageType.melee:
             case damageType.rangedWeapon:
                 if (other.CompareTag(targetTag))
                     targetsInRange.Add(other);
                 break;
 
-            case damageType.DOT:                
+            case damageType.DOT:
                 break;
         }
 
         if (hitEffect != null)
         {
-            Debug.Log("here");
             Instantiate(hitEffect, other.transform.position + hitEffect.transform.position, hitEffect.transform.rotation);
         }        
     }
@@ -242,6 +239,7 @@ public class damage : MonoBehaviour
         IDamage dmg = other.GetComponent<IDamage>();
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
+            Debug.Log("should be here");
             StartCoroutine(damageOther(dmg));
         }
     }

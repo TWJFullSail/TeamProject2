@@ -36,12 +36,12 @@ public class enemyAI : MonoBehaviour, IDamage
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log($"{name} | Agent assigned: {agent != null}");
+        //Debug.Log($"{name} | Agent assigned: {agent != null}");
 
         if (agent != null)
         {
-            Debug.Log($"{name} | Enabled: {agent.enabled}");
-            Debug.Log($"{name} | On NavMesh: {agent.isOnNavMesh}");
+            //Debug.Log($"{name} | Enabled: {agent.enabled}");
+            //Debug.Log($"{name} | On NavMesh: {agent.isOnNavMesh}");
         }
 
         colorOrig = model.material.color;
@@ -166,7 +166,7 @@ public class enemyAI : MonoBehaviour, IDamage
                 }
                 else
                 {
-                    Debug.LogError($"{name}: NavMeshAgent is not on a NavMesh!");
+                    //Debug.LogError($"{name}: NavMeshAgent is not on a NavMesh!");
                 }
                 rotateGun();
                 faceTarget();
