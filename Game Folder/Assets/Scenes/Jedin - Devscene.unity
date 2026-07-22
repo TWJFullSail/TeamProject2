@@ -657,9 +657,9 @@ MonoBehaviour:
   - {fileID: 1901899798}
   - {fileID: 1701010834}
   - {fileID: 1269934906}
-  startingEnemies: 1
-  timeBetweenEnemies: 3
-  timeBetweenWaves: 15
+  startingEnemies: 5
+  timeBetweenEnemies: 1
+  timeBetweenWaves: 5
 --- !u!4 &1797123055
 Transform:
   m_ObjectHideFlags: 0
