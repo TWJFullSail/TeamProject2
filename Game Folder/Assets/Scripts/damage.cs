@@ -35,7 +35,7 @@ public class damage : MonoBehaviour
     bool canPierce;
     string targetTag = "Enemy";
 
-
+    public GameObject projectilePrefab;
     Transform firePoint;
     bool targetAtPosition;
     float detectionRadius;
