@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
 
-
 public class enemyAI : MonoBehaviour, IDamage
 {
     [SerializeField] Renderer model;
@@ -20,6 +19,8 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
 
+    int HPOrig;																// stores the prefab's original health
+
     Color colorOrig;
 
     Vector3 playerDir;
@@ -29,20 +30,44 @@ public class enemyAI : MonoBehaviour, IDamage
     float angleToPlayer;
     float roamTimer;
     float stoppingDistOrig;
+    float waveDamageMultiplier = 1;
 
     bool playerInTrigger;
+    bool hasReportedDeath;
+
+    void Awake()
+    {
+        HPOrig = HP;
+    }
 
     void Start()
     {
-        colorOrig = model.material.color;
-       // gamemanager.instance.updateGameGoal(1);
+        if (model != null)
+        {
+            colorOrig = model.material.color;
+        }
+
         startingPos = transform.position;
-        stoppingDistOrig = agent.stoppingDistance;
+
+        if (agent != null)
+        {
+            stoppingDistOrig = agent.stoppingDistance;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (!agentReady())													// prevents NavMesh calls before the agent is ready
+        {
+            return;
+        }
+
+        if (gamemanager.instance == null ||
+            gamemanager.instance.player == null)
+        {
+            return;
+        }
+
         if (playerInTrigger && canSeePlayer())
         {
 
@@ -53,11 +78,53 @@ public class enemyAI : MonoBehaviour, IDamage
         }
     }
 
+    public void setWaveStats(float healthMultiplier, float damageMultiplier)
+    {
+        healthMultiplier = Mathf.Max(0.01f, healthMultiplier);
+        damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
+
+        HP = Mathf.Max(1,
+            Mathf.RoundToInt(HPOrig * healthMultiplier));					// applies the current wave's health increase
+
+        waveDamageMultiplier = damageMultiplier;
+
+        enemyContactDamage[] contactDamageScripts =
+            GetComponentsInChildren<enemyContactDamage>(true);
+
+        for (int i = 0; i < contactDamageScripts.Length; i++)
+        {
+            contactDamageScripts[i].setDamageMultiplier(
+                waveDamageMultiplier);
+        }
+
+        damage[] damageScripts =
+            GetComponentsInChildren<damage>(true);
+
+        for (int i = 0; i < damageScripts.Length; i++)
+        {
+            damageScripts[i].setDamageMultiplier(
+                waveDamageMultiplier);
+        }
+    }
+
+    bool agentReady()
+    {
+        return agent != null &&
+               agent.enabled &&
+               agent.isOnNavMesh;
+    }
+
     void checkRoam()
     {
+        if (agent.pathPending)
+        {
+            return;
+        }
+
         if (agent.remainingDistance < 0.01f)
         {
             roamTimer += Time.deltaTime;
+
             if (roamTimer >= roamPauseTime)
             {
                 roam();
@@ -74,26 +141,40 @@ public class enemyAI : MonoBehaviour, IDamage
         ranPos += startingPos;
 
         NavMeshHit hit;
-        NavMesh.SamplePosition(ranPos, out hit, roamDist, 1);
 
-        agent.SetDestination(hit.position);
-
+        if (NavMesh.SamplePosition(
+            ranPos, out hit, roamDist, NavMesh.AllAreas))					// confirms the random point is on a NavMesh
+        {
+            agent.SetDestination(hit.position);
+        }
     }
 
     bool canSeePlayer()
     {
         shootTimer += Time.deltaTime;
-        playerDir = gamemanager.instance.player.transform.position - transform.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);                                // checks if the player is inside the enemy's field of view
 
-        Debug.DrawRay(transform.position, playerDir);
+        playerDir =
+            gamemanager.instance.player.transform.position -
+            transform.position;
+
+        angleToPlayer =
+            Vector3.Angle(playerDir, transform.forward);
+
+        Debug.DrawRay(transform.position, playerDir, Color.red);
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, playerDir, out hit))
+
+        if (Physics.Raycast(
+            transform.position,
+            playerDir.normalized,
+            out hit,
+            playerDir.magnitude))
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)                  // confirms there is a clear path to the player
+            if (hit.collider.CompareTag("Player") &&
+                angleToPlayer <= FOV)										// checks line of sight and field of view
             {
-                agent.SetDestination(gamemanager.instance.player.transform.position);
+                agent.SetDestination(
+                    gamemanager.instance.player.transform.position);
 
                 rotateGun();
                 faceTarget();
@@ -104,15 +185,15 @@ public class enemyAI : MonoBehaviour, IDamage
                 }
 
                 agent.stoppingDistance = stoppingDistOrig;
+
                 return true;
             }
         }
 
-         agent.stoppingDistance = 0;
-         return false;
-       
-    }
+        agent.stoppingDistance = 0;
 
+        return false;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -127,50 +208,125 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
-            agent.stoppingDistance = 0;
+
+            if (agentReady())
+            {
+                agent.stoppingDistance = 0;
+            }
         }
     }
 
     void shoot()
     {
         shootTimer = 0;
-        if (bullet != null)
+
+        if (bullet == null ||
+            shootPos == null ||
+            gunPivot == null)
         {
-            Instantiate(bullet, shootPos.position, gunPivot.rotation);
+            return;
+        }
+
+        GameObject bulletInstance =
+            Instantiate(
+                bullet,
+                shootPos.position,
+                gunPivot.rotation);
+
+        damage bulletDamage =
+            bulletInstance.GetComponent<damage>();
+
+        if (bulletDamage == null)
+        {
+            bulletDamage =
+                bulletInstance.GetComponentInChildren<damage>();
+        }
+
+        if (bulletDamage != null)
+        {
+            bulletDamage.setDamageMultiplier(
+                waveDamageMultiplier);										// applies the wave damage to the new projectile
         }
     }
 
     void rotateGun()
     {
+        if (gunPivot == null)
+        {
+            return;
+        }
+
         Quaternion rot = Quaternion.LookRotation(playerDir);
-        gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
+
+        gunPivot.rotation = Quaternion.Lerp(
+            gunPivot.rotation,
+            rot,
+            gunRotateSpeed * Time.deltaTime);
     }
 
     void faceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, faceTargetSpeed * Time.deltaTime);
+        Vector3 flatPlayerDir =
+            new Vector3(playerDir.x, 0, playerDir.z);
+
+        if (flatPlayerDir == Vector3.zero)
+        {
+            return;
+        }
+
+        Quaternion rot = Quaternion.LookRotation(flatPlayerDir);
+
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            rot,
+            faceTargetSpeed * Time.deltaTime);
     }
 
     public void takeDamage(int amount)
     {
+        if (hasReportedDeath)												// prevents the same enemy from being counted twice
+        {
+            return;
+        }
+
         HP -= amount;
-        agent.SetDestination(gamemanager.instance.player.transform.position);
 
         if (HP <= 0)
         {
-            gamemanager.instance.updateGameGoal(-1);
+            hasReportedDeath = true;
+
+            if (gamemanager.instance != null)
+            {
+                gamemanager.instance.updateGameGoal(-1);
+            }
+
             Destroy(gameObject);
+
+            return;
         }
-        else
+
+        if (agentReady() &&
+            gamemanager.instance != null &&
+            gamemanager.instance.player != null)
         {
-            StartCoroutine(flashRed());
+            agent.SetDestination(
+                gamemanager.instance.player.transform.position);
         }
+
+        StartCoroutine(flashRed());
     }
+
     IEnumerator flashRed()
     {
+        if (model == null)
+        {
+            yield break;
+        }
+
         model.material.color = Color.red;
+
         yield return new WaitForSeconds(0.1f);
+
         model.material.color = colorOrig;
     }
 }

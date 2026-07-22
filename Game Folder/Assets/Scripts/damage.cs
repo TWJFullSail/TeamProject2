@@ -3,8 +3,8 @@ using System.Collections;
 
 public class damage : MonoBehaviour
 {
-
     enum damageType { bullet, stationary, DOT }
+
     [SerializeField] damageType type;
     [SerializeField] Rigidbody rb;
 
@@ -14,7 +14,15 @@ public class damage : MonoBehaviour
     [SerializeField] int bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
+    int damageAmountOrig;													// stores the prefab's original damage
+
     bool isDamaging;
+
+    void Awake()
+    {
+        damageAmountOrig = damageAmount;
+    }
+
     void Start()
     {
         if (type == damageType.bullet)
@@ -23,6 +31,7 @@ public class damage : MonoBehaviour
             Destroy(gameObject, bulletDestroyTime);
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.isTrigger)
@@ -31,6 +40,7 @@ public class damage : MonoBehaviour
         }
 
         IDamage dmg = other.GetComponent<IDamage>();
+
         if (dmg != null && type != damageType.DOT)
         {
             dmg.takeDamage(damageAmount);
@@ -42,26 +52,42 @@ public class damage : MonoBehaviour
             {
                 Instantiate(hitEffect, transform.position, Quaternion.identity);
             }
+
             Destroy(gameObject);
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.isTrigger)
         {
             return;
         }
+
         IDamage dmg = other.GetComponent<IDamage>();
+
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
             StartCoroutine(damageOther(dmg));
         }
     }
-    IEnumerator damageOther(IDamage d)
+
+    public void setDamageMultiplier(float multiplier)
+    {
+        multiplier = Mathf.Max(0.01f, multiplier);
+
+        damageAmount = Mathf.Max(1,
+            Mathf.RoundToInt(damageAmountOrig * multiplier));					// scales from the original damage value
+    }
+
+    IEnumerator damageOther(IDamage dmg)
     {
         isDamaging = true;
-        d.takeDamage(damageAmount);
+
+        dmg.takeDamage(damageAmount);
+
         yield return new WaitForSeconds(damageRate);
+
         isDamaging = false;
     }
 }
