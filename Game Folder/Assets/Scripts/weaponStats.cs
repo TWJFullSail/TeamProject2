@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class weaponStats : ScriptableObject
 {
-    enum damageType
+    public enum weaponType
     {
-        bullet,
-        stationary,
-        AOE,
-        Rotate,
-        DOT
+        aura = 0,
+        arm = 1,
+        range = 2,
+        passive = 3
+    }
+
+    public enum stanceType
+    {
+        nature = 0,
+        fantasy = 1,
+        tech = 2,
+        holy = 3
     }
 
     public GameObject weaponModel;
 
-    [SerializeField] damageType type;
+    public weaponType type;
+    public stanceType stance;
     [Range(1,100)] public int damage;
     [Range(1, 1000)] public int detectDist;
     [Range(1, 100)] public int damageDist;

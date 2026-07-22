@@ -534,7 +534,7 @@ GameObject:
   - component: {fileID: 7133218514645554687}
   m_Layer: 7
   m_Name: Enemy 1.0
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -568,18 +568,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5921785029d8c7649baa3ad2029f6f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
-  model: {fileID: 0}
+  model: {fileID: 6515721808002073225}
   agent: {fileID: 7133218514645554687}
-  HP: 20
-  faceTargetSpeed: 2
+  HP: 3
+  faceTargetSpeed: 5
   FOV: 45
-  roamDist: 0
-  roamPauseTime: 0
-  bullet: {fileID: 0}
-  gunPivot: {fileID: 0}
-  shootPos: {fileID: 0}
-  shootRate: 10
-  gunRotateSpeed: 2
+  roamDist: 20
+  roamPauseTime: 1
+  bullet: {fileID: 5847155271652780750, guid: 1349da541972e694cbc1d5a88f14029f, type: 3}
+  gunPivot: {fileID: 4446749787455840186}
+  shootPos: {fileID: 4777772277700636142}
+  shootRate: 0.5
+  gunRotateSpeed: 3
 --- !u!33 &6986632289804971165
 MeshFilter:
   m_ObjectHideFlags: 0

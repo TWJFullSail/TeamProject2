@@ -1,6 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static weaponStats;
@@ -18,8 +17,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     [SerializeField] int gravity;
     
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
-    [SerializeField] List<GameObject> weaponInv = new List<GameObject>();
-
+    [SerializeField] List<weaponStats> weaponInv = new List<weaponStats>();
+    [SerializeField] HashSet<stanceType> stanceInv = new HashSet<stanceType>();
 
     [SerializeField] GameObject gunModel;
     [SerializeField] Transform aura;
@@ -27,10 +26,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     [SerializeField] Transform rangeWeapon;
     [SerializeField] Transform passive;
 
-    [SerializeField] gunStats startingGun;
-
-    HashSet<stanceType> stanceInv = new HashSet<stanceType>();
-    [SerializeField] List<weaponStats> statInv = new List<weaponStats>();
+    [SerializeField] weaponStats startingWeapon;
 
     int jumpCount;
     int HPOrig;
@@ -46,9 +42,9 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     {
         HPOrig = HP;
 
-        if (startingGun != null)
+        if (startingWeapon != null)
         {
-            getGunStats(startingGun);
+            getWeaponStats(startingWeapon);
         }
 
         spawnPlayer();
@@ -91,11 +87,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         }
         /**/
 
-        //selectGun();
-        /*
-         * In this game we aren't selecting a gun, but rather switching stances and changing the player's entire weapon set.
-        /**/
-        changeStance();
+        selectGun();
         reload();
     }
 
@@ -215,10 +207,9 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         updatePlayerUI();
     }
 
-    public void getWeaponStats(GameObject prefab, weaponStats weapon)
+    public void getWeaponStats(weaponStats weapon)
     {
-        weaponInv.Add(prefab);
-        statInv.Add(weapon);
+        weaponInv.Add(weapon);
 
         int originalCount = stanceInv.Count;
         stanceInv.Add(weapon.stance);        
@@ -235,7 +226,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
     {
         if (stanceInv.Count == 0) return default;
 
-        List<stanceType> stanceList = stanceInv.ToList<stanceType>();
+        List<stanceType> stanceList = stanceInv.ToList();
 
         if (stanceInvPos < 0 || stanceInvPos >= stanceList.Count)
             return default;
@@ -257,35 +248,26 @@ public class playerController : MonoBehaviour, IDamage, IPickupWeapon
         {
             Destroy(child.gameObject);
         }
-        foreach (Transform child in passive)
-        {
-            Destroy(child.gameObject);
-        }
 
-        stanceType currentStance = GetCurrentStance();
+        stanceType currentStance = stanceInv[];
 
-        for (int i = 0; i < weaponInv.Count; i++)
+        foreach (weaponStats ws in stanceInv[stanceInvPos])
         {
-            weaponStats ws = statInv[i];
-            if (ws.stance == currentStance)
+            switch ((int)ws.type)
             {
-                GameObject prefab = weaponInv[i];
-                switch ((int)ws.type)
-                {
-                    case 0:
-                        Instantiate(prefab, aura.position, aura.rotation, aura);
-                        break;
-                    case 1:
-                        Instantiate(prefab, arms.position, arms.rotation, arms);
-                        break;
-                    case 2:
-                        Instantiate(prefab, rangeWeapon.position, rangeWeapon.rotation, rangeWeapon);
-                        break;
-                    case 3:
-                        Instantiate(prefab, passive.position, passive.rotation, passive);
-                        break;
-                }
-            }
+                case 0:
+                    Instantiate(ws.weaponModel, aura.position, aura.rotation, aura);
+                    break;
+                case 1:
+                    Instantiate(ws.weaponModel, arms.position, arms.rotation, arms);
+                    break;
+                case 2:
+                    Instantiate(ws.weaponModel, rangeWeapon.position, rangeWeapon.rotation, rangeWeapon);
+                    break;
+                case 3:
+                    Instantiate(ws.weaponModel, passive.position, passive.rotation, passive);
+                    break;
+        }
         }
     }
 
