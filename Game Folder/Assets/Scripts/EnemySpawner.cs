@@ -18,6 +18,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float healthIncreasePerWave = 0.25f;
     [SerializeField] float damageIncreasePerWave = 0.15f;
 
+    [Header("Wave UI")]
+    [SerializeField] waveHUD waveDisplay;
+
     int currentWave = 1;
 
     void Start()
@@ -48,6 +51,13 @@ public class EnemySpawner : MonoBehaviour
                 enemyCount,
                 finalWave);                                                 // registers the current wave goal
 
+            if (waveDisplay != null)
+            {
+                waveDisplay.startWave(
+                    currentWave,
+                    totalWaves);
+            }
+
             Debug.Log(
                 "Starting Wave " + currentWave +
                 " with " + enemyCount + " enemies.");
@@ -67,11 +77,55 @@ public class EnemySpawner : MonoBehaviour
                 yield break;
             }
 
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return StartCoroutine(
+                         showNextWaveCountdown());
 
             currentWave++;
 
         }
+    }
+
+    IEnumerator showNextWaveCountdown()
+    {
+        if (waveDisplay == null)
+        {
+            yield return new WaitForSeconds(
+                timeBetweenWaves);
+
+            yield break;
+        }
+
+        float remainingTime =
+            Mathf.Max(0, timeBetweenWaves);
+
+        waveDisplay.showWaveComplete(currentWave);
+
+        float completeMessageTime =
+            Mathf.Min(1f, remainingTime);
+
+        if (completeMessageTime > 0)
+        {
+            yield return new WaitForSeconds(
+                completeMessageTime);
+
+            remainingTime -= completeMessageTime;
+        }
+
+        while (remainingTime > 0)
+        {
+            waveDisplay.showNextWave(
+                Mathf.CeilToInt(remainingTime));
+
+            float waitTime =
+                Mathf.Min(1f, remainingTime);
+
+            yield return new WaitForSeconds(
+                waitTime);
+
+            remainingTime -= waitTime;
+        }
+
+        waveDisplay.hideWaveMessage();
     }
 
     IEnumerator SpawnWave(int enemyCount)

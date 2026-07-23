@@ -109,7 +109,7 @@ public class gamemanager : MonoBehaviour
         if (gameGoalCountText != null)
         {
             gameGoalCountText.text =
-                gameGoalCount.ToString("F0");
+                "Enemies Remaining: " + gameGoalCount;
         }
     }
 
