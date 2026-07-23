@@ -16,13 +16,13 @@ MonoBehaviour:
   stance: 0
   type: 0
   dType: 3
-  dmgAmt: 5
+  dmgAmt: 8
   dmgRate: 0.5
   destroyedOnHit: 0
   canPierce: 0
   targetTag: Enemy
   projectileSpd: 15
-  bulletDestroyTime: 10
+  bulletDestroyTime: 5
   pivot: {fileID: 0}
   rotationSpeed: 30
   recoilAngle: 45
@@ -40,4 +40,4 @@ MonoBehaviour:
   hitEffect: {fileID: 2573629263112366481, guid: a8724c2df04a0204cbf8c6f3cc450a51, type: 3}
   sound:
   - {fileID: 8300000, guid: 70991fa5b87d16f44b27710a4d124b6f, type: 3}
-  soundVol: 0.4
+  soundVol: 0.2
