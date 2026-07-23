@@ -182,6 +182,26 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a76b87d29cb385f468299d4a7f24b370, type: 3}
   - {fileID: 8300000, guid: ecd55514b5fc1e543a8de1bf8fa0c261, type: 3}
   audStepsVol: 0.3
+  noAmmo:
+  - {fileID: 8300000, guid: 6e19cb68a404b4543b60fc8394f307a9, type: 3}
+  noAmmoVol: 0.3
+  reloading:
+  - {fileID: 8300000, guid: 8ac7ae1149ef9c64f98d9e9cc9368314, type: 3}
+  reloadingVol: 0.3
+  noStamina:
+  - {fileID: 8300000, guid: 7a9ef8f3c6b6fe04a8d5c1a98db865af, type: 3}
+  - {fileID: 8300000, guid: edd54b8fd12caa04db01edae2a78e454, type: 3}
+  - {fileID: 8300000, guid: e207efdc8ff247340a6b3ef0e40c2a4d, type: 3}
+  - {fileID: 8300000, guid: 293e5ad8a2634224cb03671706bc604b, type: 3}
+  - {fileID: 8300000, guid: 327cc991f1c622141aacd5bc31ef6976, type: 3}
+  - {fileID: 8300000, guid: 41256a1626dc65d469280f2a8a9ddf45, type: 3}
+  - {fileID: 8300000, guid: fa6030c2ec1cb8d449472c4ff0747a0d, type: 3}
+  noStaminaVol: 0.3
+  coins: 50
+  shopUI: {fileID: 0}
+  healthPerUpgrade: 25
+  staminaPerUpgrade: 20
+  ammoPerUpgrade: 30
 --- !u!143 &8139457096622479270
 CharacterController:
   m_ObjectHideFlags: 0
@@ -273,7 +293,7 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4009973623836917996}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
