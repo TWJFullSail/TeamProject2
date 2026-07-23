@@ -62,6 +62,8 @@ public class ShopUI : MonoBehaviour
         gm.menuActive = shopPanel;
 
         UpdateCoinDisplay();
+
+        gamemanager.instance.OpenShop();
     }
 
     public void CloseShop()
@@ -73,6 +75,8 @@ public class ShopUI : MonoBehaviour
 
         var gm = gamemanager.instance;
         gm.stateUnpause();
+
+        gamemanager.instance.CloseShop();
     }
 
     // ====================== PURCHASES ======================
