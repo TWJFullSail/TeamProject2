@@ -16,7 +16,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(1, 50)][SerializeField] int jumpSpeed;
     [Range(1, 3)][SerializeField] int jumpMax;
     [Range(10, 100)][SerializeField] int gravity;
-    
+
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
     gunStats currentGun;
     [SerializeField] GameObject gunModel;
@@ -36,6 +36,17 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [SerializeField] AudioClip[] noStamina;
     [Range(0, 1)][SerializeField] float noStaminaVol;
 
+    [Header("=== SHOP & CURRENCY ===")]
+    public int coins = 0;
+    [SerializeField] ShopUI shopUI;
+    int healthUpgradeCost = 20;
+    int staminaUpgradeCost = 15;
+    int ammoUpgradeCost = 12;
+    // How much each upgrade gives
+    [SerializeField] int healthPerUpgrade = 25;
+    [SerializeField] int staminaPerUpgrade = 20;
+    [SerializeField] int ammoPerUpgrade = 30;
+
     //Old idea for "Bullet Heaven multiple weapon system abandoned
     /*
     [SerializeField] List<GameObject> weaponInv = new List<GameObject>();    
@@ -50,7 +61,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     int jumpCount;
     int HPOrig;
-    int StaminaOrig;    
+    int StaminaOrig;
     int gunInvPos = 0;
     float shootTimer;
 
@@ -71,7 +82,20 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if (!gamemanager.instance.isPaused)
         {
-            movement();            
+            movement();
+
+            if (shopUI != null && !shopUI.IsOpen)
+            {
+                Collider[] hits = Physics.OverlapSphere(transform.position, 4f);
+                foreach (var hit in hits)
+                {
+                    if (hit.CompareTag("ShopNPC") && Input.GetKeyDown(KeyCode.E))
+                    {
+                        shopUI.OpenShop();
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -95,7 +119,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         jump();
 
         controller.Move(playerVel * Time.deltaTime);
-        playerVel.y -= gravity * Time.deltaTime;        
+        playerVel.y -= gravity * Time.deltaTime;
 
         shootTimer += Time.deltaTime;
         if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > currentGun.shootRate)
@@ -120,11 +144,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     void sprint()
     {
-        if(Input.GetButtonDown("Sprint") && Stamina > 0) {
+        if (Input.GetButtonDown("Sprint") && Stamina > 0) {
             speed *= sprintMod;
             isSprinting = true;                           
         }
-        else if(Input.GetButtonUp("Sprint")) {
+        else if (Input.GetButtonUp("Sprint")) {
             speed /= sprintMod;
             isSprinting = false;
         }
@@ -152,7 +176,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             {
                 Stamina += StaminaRate;
                 updatePlayerStamina();
-            }            
+            }
         }
         isPlayingSteps = false;
     }
@@ -261,7 +285,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerHP();
         StartCoroutine(flashDamage());
 
-        if(HP <= 0)
+        if (HP <= 0)
         {
             gamemanager.instance.youLose();
         }
@@ -271,7 +295,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         updatePlayerHP();
         updatePlayerStamina();
-        updateAmmoUI();        
+        updateAmmoUI();
+        gamemanager.instance.UpdateCoinUI(coins);
     }
 
     public void updatePlayerHP()
@@ -349,7 +374,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     void selectGun()
     {
-        if(Input.GetAxis("Mouse ScrollWheel") > 0 && gunInvPos < gunInv.Count - 1)
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunInvPos < gunInv.Count - 1)
         {
             gunInvPos++;
             changeGun();
@@ -358,7 +383,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         {
             gunInvPos--;
             changeGun();
-        }        
+        }
     }
 
     public void spawnPlayer()
@@ -372,6 +397,63 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerUI();
     }
 
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        gamemanager.instance.UpdateCoinUI(coins);   // ← we'll create this
+    }
+
+    public bool SpendCoins(int amount)
+    {
+        if (coins >= amount)
+        {
+            coins -= amount;
+            gamemanager.instance.UpdateCoinUI(coins);
+            return true;
+        }
+        return false;
+    }
+    public void BuyHealthUpgrade()
+    {
+        if (SpendCoins(healthUpgradeCost))
+        {
+            HPOrig += healthPerUpgrade;
+            HP = HPOrig;
+            healthUpgradeCost = Mathf.RoundToInt(healthUpgradeCost * 1.45f);
+            updatePlayerHP();
+        }
+    }
+    public void BuyStaminaUpgrade()
+    {
+        if (SpendCoins(staminaUpgradeCost))
+        {
+            StaminaOrig += staminaPerUpgrade;
+            Stamina = StaminaOrig;
+            staminaUpgradeCost = Mathf.RoundToInt(staminaUpgradeCost * 1.4f);
+            updatePlayerStamina();
+        }
+    }
+
+    public void BuyAmmoUpgrade()
+    {
+        if (SpendCoins(ammoUpgradeCost) && currentGun != null)
+        {
+            currentGun.clipMax += 1;
+            currentGun.ammoTotal += currentGun.clipSize;
+
+            currentGun.ammoCur = Mathf.Min(currentGun.ammoCur + ammoPerUpgrade, currentGun.clipSize);
+
+            ammoUpgradeCost = Mathf.RoundToInt(ammoUpgradeCost * 1.35f);
+            updateAmmoUI();
+
+        }
+    }
+
+
+
+
+
+
     /*
 
     public void getWeaponStats(GameObject prefab, weaponStats weapon)
@@ -381,7 +463,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
         int originalCount = stanceInv.Count;
         stanceInv.Add(weapon.stance);        
-        
+
         if (originalCount < stanceInv.Count)
         {
             stanceInvPos = stanceInv.Count - 1;            
