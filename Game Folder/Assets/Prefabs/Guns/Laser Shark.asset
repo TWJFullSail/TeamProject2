@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd098954f815fe4a844f4f23d3476fc, type: 3}
+  m_Name: Laser Shark
+  m_EditorClassIdentifier: Assembly-CSharp::gunStats
+  gunModel: {fileID: 1606164612921789418, guid: 75a06fe93c4785046bbac91702309505, type: 3}
+  projectile: {fileID: 0}
+  shootDamage: 3
+  shootDist: 100
+  shootRate: 0.25
+  ammoCur: 0
+  ammoTotal: 0
+  clipSize: 50
+  clipMax: 5
+  hitEffect: {fileID: 5584602140419805224, guid: 9b78e1eecbaa4434ca9d5b9804d26c9f, type: 3}
+  shootSound:
+  - {fileID: 8300000, guid: 1cca2d7d5e5239543aea7f78103d4cea, type: 3}
+  shootSoundVol: 0.2
+  isLaser: 1

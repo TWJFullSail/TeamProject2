@@ -199,7 +199,7 @@ public class damage : MonoBehaviour
         {
             return;
         }
-        Debug.Log(type);
+
         switch (type)
         {
             case damageType.bullet:
@@ -208,8 +208,7 @@ public class damage : MonoBehaviour
             case damageType.melee:
                 IDamage dmg = other.GetComponent<IDamage>();
                 if (dmg != null)
-                {
-                    Debug.Log(damageAmt);
+                {                    
                     dmg.takeDamage(damageAmt);
                     if (type == damageType.bullet && !canPierce && destroyOnHit)
                     {
@@ -262,7 +261,6 @@ public class damage : MonoBehaviour
         IDamage dmg = other.GetComponent<IDamage>();
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
-            Debug.Log("should be here");
             StartCoroutine(damageOther(dmg));
         }
     }

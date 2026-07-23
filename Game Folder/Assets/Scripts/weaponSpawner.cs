@@ -26,7 +26,6 @@ public class weaponSpawner : MonoBehaviour
     void SpawnWeapon()
     {
         int index = Random.Range(0, weaponList.Length);
-        Debug.Log(index);
         weapon = Instantiate(weaponList[index], transform.position, transform.rotation);
     }
 

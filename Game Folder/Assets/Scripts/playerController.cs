@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static weaponStats;
 
@@ -18,10 +16,12 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(1, 50)][SerializeField] int jumpSpeed;
     [Range(1, 3)][SerializeField] int jumpMax;
     [Range(10, 100)][SerializeField] int gravity;
-    
+
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
     gunStats currentGun;
     [SerializeField] GameObject gunModel;
+    [SerializeField] LineRenderer laserLine;
+    [SerializeField] Transform laserPos;
 
     [SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
@@ -29,6 +29,23 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(0, 1)][SerializeField] float audHurtVol;
     [SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
+    [SerializeField] AudioClip[] noAmmo;
+    [Range(0, 1)][SerializeField] float noAmmoVol;
+    [SerializeField] AudioClip[] reloading;
+    [Range(0, 1)][SerializeField] float reloadingVol;
+    [SerializeField] AudioClip[] noStamina;
+    [Range(0, 1)][SerializeField] float noStaminaVol;
+
+    [Header("=== SHOP & CURRENCY ===")]
+    public int coins = 0;
+    [SerializeField] ShopUI shopUI;
+    int healthUpgradeCost = 20;
+    int staminaUpgradeCost = 15;
+    int ammoUpgradeCost = 12;
+    // How much each upgrade gives
+    [SerializeField] int healthPerUpgrade = 25;
+    [SerializeField] int staminaPerUpgrade = 20;
+    [SerializeField] int ammoPerUpgrade = 30;
 
     //Old idea for "Bullet Heaven multiple weapon system abandoned
     /*
@@ -44,11 +61,12 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     int jumpCount;
     int HPOrig;
-    int StaminaOrig;    
+    int StaminaOrig;
     int gunInvPos = 0;
     float shootTimer;
 
     bool isSprinting;
+    bool isBreating;
     bool isPlayingSteps;
 
     Vector3 moveDir;
@@ -64,7 +82,20 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if (!gamemanager.instance.isPaused)
         {
-            movement();            
+            movement();
+
+            if (shopUI != null && !shopUI.isOpen)
+            {
+                Collider[] hits = Physics.OverlapSphere(transform.position, 4f);
+                foreach (var hit in hits)
+                {
+                    if (hit.CompareTag("ShopNPC") && Input.GetKeyDown(KeyCode.E))
+                    {
+                        shopUI.OpenShop();
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -86,13 +117,25 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
         sprint();
         jump();
+
         controller.Move(playerVel * Time.deltaTime);
-        playerVel.y -= gravity * Time.deltaTime;        
+        playerVel.y -= gravity * Time.deltaTime;
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1") && gunInv.Count > 0 && currentGun.ammoCur > 0 && shootTimer > currentGun.shootRate)
+        if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > currentGun.shootRate)
         {
-            shoot();
+            if (currentGun.ammoCur > 0)
+            {
+                shoot();
+            }
+            else
+            {
+                audioManager.instance.audPlayer.PlayOneShot(noAmmo[Random.Range(0, noAmmo.Length)], noAmmoVol);
+            }
+        }
+        else
+        {
+            laserLine.enabled = false;
         }
 
         selectGun();
@@ -101,11 +144,11 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
     void sprint()
     {
-        if(Input.GetButtonDown("Sprint") && Stamina > 0) {
+        if (Input.GetButtonDown("Sprint") && Stamina > 0) {
             speed *= sprintMod;
-            isSprinting = true;
+            isSprinting = true;                           
         }
-        else if(Input.GetButtonUp("Sprint")) {
+        else if (Input.GetButtonUp("Sprint")) {
             speed /= sprintMod;
             isSprinting = false;
         }
@@ -120,7 +163,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         if (isSprinting)
         {
             yield return new WaitForSeconds(0.3f);
-            if (Stamina > 0)
+            if (Stamina > 1)
             {
                 Stamina--;
                 updatePlayerStamina();
@@ -133,19 +176,32 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             {
                 Stamina += StaminaRate;
                 updatePlayerStamina();
-            }            
+            }
         }
         isPlayingSteps = false;
+    }
+
+    IEnumerator playBreathing()
+    {
+        isBreating = true;
+        if (Stamina < 15)
+        {
+            audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
+            yield return new WaitForSeconds(9f);                      
+        }
+
+        isBreating = false;
     }
 
     void jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && Stamina >= 10)
         {
+            audioManager.instance.audPlayer.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
             playerVel.y = jumpSpeed;
             jumpCount++;
             Stamina -= 10;
-            updatePlayerStamina();
+            updatePlayerStamina();                        
         }
     }
 
@@ -166,7 +222,6 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, currentGun.shootDist, ~ignoreLayer))
             {
-                //Debug.Log(hit.collider.name);
                 if (currentGun.hitEffect != null)
                 {
                     Instantiate(currentGun.hitEffect, hit.point, Quaternion.identity);
@@ -178,6 +233,22 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
                     dmg.takeDamage(currentGun.shootDamage);
                 }
             }
+
+            if (currentGun.isLaser)
+            {
+                if (Physics.Raycast(laserPos.position, laserPos.forward, out hit, currentGun.shootDist))
+                {
+                    laserLine.SetPosition(0, laserPos.position);
+                    laserLine.SetPosition(1, hit.point);
+                }
+                else
+                {
+                    laserLine.SetPosition(0, laserPos.position);
+                    laserLine.SetPosition(1, laserPos.position + laserPos.forward * currentGun.shootDist);
+                }
+
+                laserLine.enabled = true;
+            }            
         }
     }
 
@@ -185,6 +256,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if (Input.GetButtonDown("Reload") && currentGun != null && currentGun.ammoCur < currentGun.clipSize && currentGun.ammoTotal > 0)
         {
+            audioManager.instance.audPlayer.PlayOneShot(reloading[Random.Range(0, reloading.Length)], reloadingVol);
             int missing = currentGun.clipSize - currentGun.ammoCur;
             if (currentGun.ammoTotal > missing)
             {
@@ -207,7 +279,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerHP();
         StartCoroutine(flashDamage());
 
-        if(HP <= 0)
+        if (HP <= 0)
         {
             gamemanager.instance.youLose();
         }
@@ -217,7 +289,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         updatePlayerHP();
         updatePlayerStamina();
-        updateAmmoUI();        
+        updateAmmoUI();
+        gamemanager.instance.UpdateCoinUI(coins);
     }
 
     public void updatePlayerHP()
@@ -230,6 +303,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         gamemanager.instance.playerStaminaBar.fillAmount = (float)Stamina / StaminaOrig;
         gamemanager.instance.playerStaminaText.text = Stamina.ToString("F00") + " / " + StaminaOrig.ToString("F00");
+        if (Stamina < 15 && !isBreating)
+        {
+            StartCoroutine(playBreathing());
+        }
     }
 
     public void updateAmmoUI()
@@ -283,13 +360,15 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         currentGun = gunInv[gunInvPos];
         gunModel.GetComponent<MeshFilter>().sharedMesh = currentGun.gunModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = currentGun.gunModel.GetComponent<MeshRenderer>().sharedMaterial;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterials = currentGun.gunModel.GetComponent<MeshRenderer>().sharedMaterials;
+        gunModel.transform.localScale = currentGun.gunModel.transform.localScale;
+
         updateAmmoUI();
     }
 
     void selectGun()
     {
-        if(Input.GetAxis("Mouse ScrollWheel") > 0 && gunInvPos < gunInv.Count - 1)
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunInvPos < gunInv.Count - 1)
         {
             gunInvPos++;
             changeGun();
@@ -298,7 +377,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         {
             gunInvPos--;
             changeGun();
-        }        
+        }
     }
 
     public void spawnPlayer()
@@ -312,6 +391,63 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerUI();
     }
 
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        gamemanager.instance.UpdateCoinUI(coins);   // ← we'll create this
+    }
+
+    public bool SpendCoins(int amount)
+    {
+        if (coins >= amount)
+        {
+            coins -= amount;
+            gamemanager.instance.UpdateCoinUI(coins);
+            return true;
+        }
+        return false;
+    }
+    public void BuyHealthUpgrade()
+    {
+        if (SpendCoins(healthUpgradeCost))
+        {
+            HPOrig += healthPerUpgrade;
+            HP = HPOrig;
+            healthUpgradeCost = Mathf.RoundToInt(healthUpgradeCost * 1.45f);
+            updatePlayerHP();
+        }
+    }
+    public void BuyStaminaUpgrade()
+    {
+        if (SpendCoins(staminaUpgradeCost))
+        {
+            StaminaOrig += staminaPerUpgrade;
+            Stamina = StaminaOrig;
+            staminaUpgradeCost = Mathf.RoundToInt(staminaUpgradeCost * 1.4f);
+            updatePlayerStamina();
+        }
+    }
+
+    public void BuyAmmoUpgrade()
+    {
+        if (SpendCoins(ammoUpgradeCost) && currentGun != null)
+        {
+            currentGun.clipMax += 1;
+            currentGun.ammoTotal += currentGun.clipSize;
+
+            currentGun.ammoCur = Mathf.Min(currentGun.ammoCur + ammoPerUpgrade, currentGun.clipSize);
+
+            ammoUpgradeCost = Mathf.RoundToInt(ammoUpgradeCost * 1.35f);
+            updateAmmoUI();
+
+        }
+    }
+
+
+
+
+
+
     /*
 
     public void getWeaponStats(GameObject prefab, weaponStats weapon)
@@ -321,7 +457,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
         int originalCount = stanceInv.Count;
         stanceInv.Add(weapon.stance);        
-        
+
         if (originalCount < stanceInv.Count)
         {
             stanceInvPos = stanceInv.Count - 1;            

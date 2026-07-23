@@ -17,11 +17,12 @@ MonoBehaviour:
   shootDamage: 1
   shootDist: 25
   shootRate: 0.3
-  ammoCur: 23
+  ammoCur: 22
   ammoTotal: 0
   clipSize: 25
   clipMax: 5
   hitEffect: {fileID: 5584602140419805224, guid: bb9857cd060f47c4bbbacde1537c91a1, type: 3}
   shootSound:
   - {fileID: 8300000, guid: 03173a45176bb0b459330ed603ef7c3b, type: 3}
-  shootSoundVol: 0
+  shootSoundVol: 0.4
+  isLaser: 0

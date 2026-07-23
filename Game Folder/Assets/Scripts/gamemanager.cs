@@ -6,7 +6,7 @@ public class gamemanager : MonoBehaviour
 {
     public static gamemanager instance;
 
-    [SerializeField] GameObject menuActive;
+    [SerializeField] public GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
@@ -26,7 +26,9 @@ public class gamemanager : MonoBehaviour
     public GameObject playerDamageScreen;
     public GameObject playerSpawnPos;
 
-    float timeScaleOrig;
+    public TextMeshProUGUI coinText;
+
+    public float timeScaleOrig;
 
     public int gameGoalCount;
 
@@ -127,5 +129,13 @@ public class gamemanager : MonoBehaviour
         statePause();
         menuActive = menuLose;
         menuActive.SetActive(true);
+    }
+
+    public void UpdateCoinUI(int amount)
+    {
+        if (coinText != null)
+        {
+            coinText.text = "Coins: " + amount;
+        }
     }
 }

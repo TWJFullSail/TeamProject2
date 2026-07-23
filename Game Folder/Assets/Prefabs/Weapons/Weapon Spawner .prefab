@@ -47,6 +47,7 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &4273306787437894836
@@ -96,6 +97,7 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &4396488618690838133
@@ -145,6 +147,7 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &4676478262044820377
@@ -194,6 +197,7 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &5219829964641988854
@@ -280,6 +284,7 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &7583672335448572133
@@ -329,5 +334,6 @@ MonoBehaviour:
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
+  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
