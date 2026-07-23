@@ -187,7 +187,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         if (Stamina < 15)
         {
             audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
-            yield return new WaitForSeconds(9f);                      
+            yield return new WaitForSeconds(9f);                 
         }
 
         isBreating = false;
