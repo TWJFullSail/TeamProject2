@@ -184,15 +184,17 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     IEnumerator playBreathing()
     {
         isBreating = true;
-        while (Stamina < 5)
-        {
-            audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
-            yield return new WaitForSeconds(0.3f);
-        }
         while (Stamina < 15)
         {
             audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
-            yield return new WaitForSeconds(0.5f);
+            if (Stamina < 5)
+            {
+                yield return new WaitForSeconds(0.3f);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
+            }            
         }
 
         isBreating = false;

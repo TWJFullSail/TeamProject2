@@ -1402,86 +1402,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6040511521929873634, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-      - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: coins
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-    propertyPath: shopUI
+      propertyPath: shopUI
       value: 
       objectReference: {fileID: 666619768}
-      - target: {fileID: 6040511521929873634, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2531367c848b29e4f9700fa3e9165598, type: 2}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: noAmmoVol
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: noStaminaVol
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: reloadingVol
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: noAmmo.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noAmmo.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 6e19cb68a404b4543b60fc8394f307a9, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noAmmo.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8300000, guid: d892066d58ac9514591a20ba6a801248, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: noStamina.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: reloading.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 7a9ef8f3c6b6fe04a8d5c1a98db865af, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8300000, guid: edd54b8fd12caa04db01edae2a78e454, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[2]'
-      value: 
-      objectReference: {fileID: 8300000, guid: e207efdc8ff247340a6b3ef0e40c2a4d, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[3]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 293e5ad8a2634224cb03671706bc604b, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[4]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 327cc991f1c622141aacd5bc31ef6976, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[5]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 41256a1626dc65d469280f2a8a9ddf45, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'noStamina.Array.data[6]'
-      value: 
-      objectReference: {fileID: 8300000, guid: fa6030c2ec1cb8d449472c4ff0747a0d, type: 3}
-    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
-      propertyPath: 'reloading.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 8ac7ae1149ef9c64f98d9e9cc9368314, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

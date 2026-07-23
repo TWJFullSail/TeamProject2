@@ -337,7 +337,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2203873135863689930}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4214455030234885743}
+        m_TargetAssemblyTypeName: ShopUI, Assembly-CSharp
+        m_MethodName: BuyStamina
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6531556339857281423
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +713,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4555693037914063822}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4214455030234885743}
+        m_TargetAssemblyTypeName: ShopUI, Assembly-CSharp
+        m_MethodName: BuyHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7154171227026411399
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +912,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopUI
   shopPanel: {fileID: 1253888403957882291}
   coinText: {fileID: 5933431380284348058}
+  closeKey: 101
+  interactDistance: 5
 --- !u!1 &8993134276325305635
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,7 +1034,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3921869471925238491}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4214455030234885743}
+        m_TargetAssemblyTypeName: ShopUI, Assembly-CSharp
+        m_MethodName: BuyAmmo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9009870206206978606
 GameObject:
   m_ObjectHideFlags: 0
