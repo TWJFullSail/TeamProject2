@@ -184,17 +184,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     IEnumerator playBreathing()
     {
         isBreating = true;
-        while (Stamina < 15)
+        if (Stamina < 15)
         {
             audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
-            if (Stamina < 5)
-            {
-                yield return new WaitForSeconds(0.3f);
-            }
-            else
-            {
-                yield return new WaitForSeconds(0.5f);
-            }            
+            yield return new WaitForSeconds(9f);                      
         }
 
         isBreating = false;
@@ -229,7 +222,6 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, currentGun.shootDist, ~ignoreLayer))
             {
-                //Debug.Log(hit.collider.name);
                 if (currentGun.hitEffect != null)
                 {
                     Instantiate(currentGun.hitEffect, hit.point, Quaternion.identity);

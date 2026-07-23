@@ -159,7 +159,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 99e66eabc75a72e49b5938a553a337d2, type: 2}
+  m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
 --- !u!4 &565782128 stripped
 Transform:
@@ -1485,10 +1485,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6040511521929873634, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2531367c848b29e4f9700fa3e9165598, type: 2}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: shopUI
       value: 
       objectReference: {fileID: 666619768}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: noAmmoVol
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: audHurtVol
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: audJumpVol
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: audStepsVol
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: noStaminaVol
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: reloadingVol
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: noStamina.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: 'noStamina.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fa6030c2ec1cb8d449472c4ff0747a0d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
