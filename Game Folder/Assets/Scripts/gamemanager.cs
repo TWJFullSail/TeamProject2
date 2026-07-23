@@ -144,9 +144,22 @@ public class gamemanager : MonoBehaviour
         }
     }
 
+
+    public void quitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
+
     public void OpenShop()
     {
-        if (menuShop == null) return;
+        if (menuShop == null)
+        {
+            return;
+        }
 
         statePause();
         menuActive = menuShop;
