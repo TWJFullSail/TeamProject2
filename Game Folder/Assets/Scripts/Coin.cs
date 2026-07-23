@@ -31,15 +31,13 @@ public class Coin : MonoBehaviour
             if (currency != null)
             {
                 currency.AddCoins(value);
-
-                if (pickupSound != null)
-                    AudioSource.PlayClipAtPoint(pickupSound, transform.position);
             }
-
-            if (spawner != null)
-                spawner.OnCoinDestroyed();
-
-            Destroy(gameObject);
+            else
+            {
+                
+                playerController pc = other.GetComponent<playerController>();
+                if (pc != null) pc.AddCoins(value);
+            }
         }
     }
 }
