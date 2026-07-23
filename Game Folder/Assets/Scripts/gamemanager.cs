@@ -26,6 +26,8 @@ public class gamemanager : MonoBehaviour
     public GameObject playerDamageScreen;
     public GameObject playerSpawnPos;
 
+    public TextMeshProUGUI coinText;
+
     float timeScaleOrig;
 
     public int gameGoalCount;
@@ -92,5 +94,13 @@ public class gamemanager : MonoBehaviour
         statePause();
         menuActive = menuLose;
         menuActive.SetActive(true);
+    }
+
+    public void UpdateCoinUI(int amount)
+    {
+        if (coinText != null)
+        {
+            coinText.text = "Coins: " + amount;
+        }
     }
 }

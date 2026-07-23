@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player Spawn Pos
   - Enemy
+  - ShopNPC
   layers:
   - Default
   - TransparentFX
