@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    [Header("Coin Settings")]
     public int value = 1;
     public float lifetime = 30f;
     public AudioClip pickupSound;
@@ -14,7 +15,7 @@ public class Coin : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, lifetime);
+        Destroy(gameObject, lifetime);           
         spawner = FindAnyObjectByType<CoinSpawner>();
     }
 
@@ -27,6 +28,7 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+           
             PlayerCurrency currency = other.GetComponent<PlayerCurrency>();
             if (currency != null)
             {
@@ -34,10 +36,18 @@ public class Coin : MonoBehaviour
             }
             else
             {
-                
                 playerController pc = other.GetComponent<playerController>();
-                if (pc != null) pc.AddCoins(value);
+                if (pc != null)
+                    pc.AddCoins(value);
             }
+
+            if (spawner != null)
+                spawner.OnCoinDestroyed();
+
+            if (pickupSound != null)
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+
+            Destroy(gameObject);
         }
     }
 }

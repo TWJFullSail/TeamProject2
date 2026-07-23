@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using System.Collections;
 
 public class CoinSpawner : MonoBehaviour
@@ -7,7 +8,7 @@ public class CoinSpawner : MonoBehaviour
     public GameObject coinPrefab;
 
     [Header("Continuous Spawn Settings")]
-    public float spawnInterval = 2.2f;   
+    public float spawnInterval = 2.2f;
     public bool spawnOnWaveStart = true;
     public int coinsPerWaveBurst = 8;
 
@@ -31,7 +32,7 @@ public class CoinSpawner : MonoBehaviour
     {
         while (true)
         {
-            if (currentCoinsAlive < maxCoinsAlive)
+            if (currentCoinsAlive < maxCoinsAlive && coinPrefab != null)
             {
                 Vector3 pos = GetRandomSpawnPosition();
                 if (pos != Vector3.zero)
@@ -46,16 +47,15 @@ public class CoinSpawner : MonoBehaviour
 
     public void OnWaveStart()
     {
-        if (spawnOnWaveStart)
+        if (!spawnOnWaveStart || coinPrefab == null) return;
+
+        for (int i = 0; i < coinsPerWaveBurst; i++)
         {
-            for (int i = 0; i < coinsPerWaveBurst; i++)
+            Vector3 pos = GetRandomSpawnPosition();
+            if (pos != Vector3.zero)
             {
-                Vector3 pos = GetRandomSpawnPosition();
-                if (pos != Vector3.zero)
-                {
-                    Instantiate(coinPrefab, pos, Quaternion.identity);
-                    currentCoinsAlive++;
-                }
+                Instantiate(coinPrefab, pos, Quaternion.identity);
+                currentCoinsAlive++;
             }
         }
     }
