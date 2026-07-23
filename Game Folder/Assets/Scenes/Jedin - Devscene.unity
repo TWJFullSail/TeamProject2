@@ -641,6 +641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1797123055}
   - component: {fileID: 1797123054}
+  - component: {fileID: 1797123056}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -660,7 +661,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066ccb42f24d905479b062f7179f8fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 6331383015702451104, guid: ab62b0454da2d2a4499991e216038564, type: 3}
+  enemyPrefabs:
+  - {fileID: 6331383015702451104, guid: ab62b0454da2d2a4499991e216038564, type: 3}
+  - {fileID: 1456697078870492995, guid: bf2f587c24ee6884289f0c9e09b388b2, type: 3}
+  - {fileID: 3836499550309472285, guid: 068d8f418c696a94ebd59ec16ca37d48, type: 3}
   spawnPoints:
   - {fileID: 2087729181}
   - {fileID: 565782128}
@@ -668,9 +672,12 @@ MonoBehaviour:
   - {fileID: 1901899798}
   - {fileID: 1701010834}
   - {fileID: 1269934906}
-  startingEnemies: 5
-  timeBetweenEnemies: 1
-  timeBetweenWaves: 5
+  startingEnemies: 4
+  timeBetweenEnemies: 0.5
+  timeBetweenWaves: 2
+  totalWaves: 3
+  healthIncreasePerWave: 0.25
+  damageIncreasePerWave: 0.15
 --- !u!4 &1797123055
 Transform:
   m_ObjectHideFlags: 0
@@ -686,6 +693,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1797123056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797123053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8567b5ba97b560d48b3db8b674532d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::waveDebug
 --- !u!4 &1901899798 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8886605046580985878, guid: 0ffaa7aa2d1a6734d950cb9c90295a5e, type: 3}
@@ -938,6 +957,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1947731009}
   - component: {fileID: 1947731008}
+  - component: {fileID: 1947731010}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -975,6 +995,7 @@ MonoBehaviour:
   playerDamageScreen: {fileID: 0}
   playerSpawnPos: {fileID: 1647454085}
   coinText: {fileID: 0}
+  timeScaleOrig: 0
   gameGoalCount: 5
 --- !u!4 &1947731009
 Transform:
@@ -991,6 +1012,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1947731010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947731007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8567b5ba97b560d48b3db8b674532d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::waveDebug
 --- !u!4 &2087729181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 962598464044914137, guid: 0ffaa7aa2d1a6734d950cb9c90295a5e, type: 3}

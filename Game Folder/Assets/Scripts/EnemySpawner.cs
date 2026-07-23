@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy")]
-    [SerializeField] GameObject enemyPrefab;
+    [SerializeField] GameObject[] enemyPrefabs;
 
     [Header("Spawn Points")]
     [SerializeField] Transform[] spawnPoints;
@@ -22,6 +22,18 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        if (enemyPrefabs == null ||
+        enemyPrefabs.Length == 0 ||
+        spawnPoints == null ||
+        spawnPoints.Length == 0)
+        {
+            Debug.LogError(
+                "EnemySpawner needs enemy prefabs and spawn points.");
+
+            enabled = false;
+            return;
+        }
+
         StartCoroutine(WaveLoop());
     }
 
@@ -48,7 +60,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            Debug.Log("Wave Complete!");
+            Debug.Log("Wave " + currentWave + " Complete!");
 
             if (finalWave)
             {
@@ -59,11 +71,6 @@ public class EnemySpawner : MonoBehaviour
 
             currentWave++;
 
-          //  while (gamemanager.instance.gameGoalCount > 0)
-          //  {
-          //      Debug.Log("Enemies Remaining: " + gamemanager.instance.gameGoalCount);
-          //      yield return null;
-          //  }
         }
     }
 
@@ -79,8 +86,22 @@ public class EnemySpawner : MonoBehaviour
         {
             Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
+            GameObject selectedEnemy =
+                getEnemyForWave();
+
+            if (selectedEnemy == null)
+            {
+                Debug.LogError(
+                    "No valid enemy prefab was found.");
+
+                yield break;
+            }
+
             GameObject enemyInstance =
-                Instantiate(enemyPrefab,spawn.position,spawn.rotation);
+                Instantiate(
+                    selectedEnemy,
+                    spawn.position,
+                    spawn.rotation);
 
             enemyAI enemyScript =
                 enemyInstance.GetComponent<enemyAI>();
@@ -100,5 +121,30 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(timeBetweenEnemies);
         }
+    }
+
+    GameObject getEnemyForWave()
+    {
+        int unlockedEnemyTypes =
+            Mathf.Clamp(
+                currentWave,
+                1,
+                enemyPrefabs.Length);
+
+        int startIndex =
+            Random.Range(0, unlockedEnemyTypes);
+
+        for (int i = 0; i < unlockedEnemyTypes; i++)
+        {
+            int index =
+                (startIndex + i) % unlockedEnemyTypes;
+
+            if (enemyPrefabs[index] != null)
+            {
+                return enemyPrefabs[index];
+            }
+        }
+
+        return null;
     }
 }
