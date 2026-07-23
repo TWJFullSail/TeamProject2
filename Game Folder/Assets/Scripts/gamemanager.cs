@@ -30,6 +30,8 @@ public class gamemanager : MonoBehaviour
 
     public int gameGoalCount;
 
+    bool isFinalWave = true;												// keeps the current single wave working
+
     void Awake()
     {
         instance = this;
@@ -37,6 +39,7 @@ public class gamemanager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+        updateGameGoalText();
     }
     void Update()
     {
@@ -73,20 +76,52 @@ public class gamemanager : MonoBehaviour
         menuActive = null;
     }
 
+    public void startWave(int amount, bool finalWave)
+    {
+        gameGoalCount = Mathf.Max(0, amount);
+        isFinalWave = finalWave;
+
+        updateGameGoalText();                                           // displays the new enemy total
+    }
+
     public void updateGameGoal(int amount)
     {
         gameGoalCount += amount;
-        gameGoalCountText.text = gameGoalCount.ToString("F0");
+        gameGoalCount = Mathf.Max(0, gameGoalCount);
 
-        if (gameGoalCount <= 0)
+        updateGameGoalText();
+
+        if (gameGoalCount <= 0 && isFinalWave)
         {
-            // you win
-            statePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
+            youWin();
         }
     }
 
+    public bool isGameGoalComplete()
+    {
+        return gameGoalCount <= 0;
+    }
+
+    void updateGameGoalText()
+    {
+        if (gameGoalCountText != null)
+        {
+            gameGoalCountText.text =
+                gameGoalCount.ToString("F0");
+        }
+    }
+
+    public void youWin()
+    {
+        statePause();
+
+        menuActive = menuWin;
+
+        if (menuActive != null)
+        {
+            menuActive.SetActive(true);
+        }
+    }
     public void youLose()
     {
         statePause();

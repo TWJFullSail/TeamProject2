@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using Unity.VisualScripting;
+
 
 public class enemyAI : MonoBehaviour, IDamage
 {
@@ -21,6 +21,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
 
+    int HPOrig;
     Color colorOrig;
 
     Vector3 playerDir;
@@ -30,10 +31,19 @@ public class enemyAI : MonoBehaviour, IDamage
     float angleToPlayer;
     float roamTimer;
     float stoppingDistOrig;
+    float waveDamageMultiplier;
 
     bool playerInTrigger;
+    bool hasReportedDeath;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    void Awake()
+    {
+        HPOrig = HP;
+    }
+
+
     void Start()
     {
         //Debug.Log($"{name} | Agent assigned: {agent != null}");
@@ -44,10 +54,17 @@ public class enemyAI : MonoBehaviour, IDamage
             //Debug.Log($"{name} | On NavMesh: {agent.isOnNavMesh}");
         }
 
-        colorOrig = model.material.color;
-        gamemanager.instance.updateGameGoal(1);
+        if (model != null)
+        {
+            colorOrig = model.material.color;
+        }
+
         startingPos = transform.position;
-        stoppingDistOrig = agent.stoppingDistance;
+
+        if (agent != null)
+        {
+            stoppingDistOrig = agent.stoppingDistance;
+        }
     }
 
     // Update is called once per frame
@@ -63,9 +80,50 @@ public class enemyAI : MonoBehaviour, IDamage
         }
     }
 
+    public void setWaveStats(float healthMultiplier, float damageMultiplier)
+    {
+        healthMultiplier = Mathf.Max(0.01f, healthMultiplier);
+        damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
+
+        HP = Mathf.Max(1,
+            Mathf.RoundToInt(HPOrig * healthMultiplier));                   // applies wave health scaling
+
+        waveDamageMultiplier = damageMultiplier;
+
+        enemyContactDamage[] contactDamageScripts =
+            GetComponentsInChildren<enemyContactDamage>(true);
+
+        for (int i = 0; i < contactDamageScripts.Length; i++)
+        {
+            contactDamageScripts[i].setDamageMultiplier(
+                waveDamageMultiplier);
+        }
+
+        damage[] damageScripts =
+            GetComponentsInChildren<damage>(true);
+
+        for (int i = 0; i < damageScripts.Length; i++)
+        {
+            damageScripts[i].setDamageMultiplier(
+                waveDamageMultiplier);
+        }
+    }
+
+    bool agentReady()
+    {
+        return agent != null &&
+               agent.enabled &&
+               agent.isOnNavMesh;
+    }
+
     void checkRoam()
     {
-        if(agent.remainingDistance < 0.01f)
+        if (agent.pathPending)
+        {
+            return;
+        }
+
+        if (agent.remainingDistance < 0.01f)
         {
             roamTimer += Time.deltaTime;
 
@@ -85,8 +143,11 @@ public class enemyAI : MonoBehaviour, IDamage
         ranPos += startingPos;
 
         NavMeshHit hit;
-        NavMesh.SamplePosition(ranPos, out hit, roamDist, 1);
-        agent.SetDestination(hit.position);
+        if (NavMesh.SamplePosition(
+     ranPos, out hit, roamDist, NavMesh.AllAreas))                  // confirms a valid NavMesh position
+        {
+            agent.SetDestination(hit.position);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -101,8 +162,10 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
-            agent.stoppingDistance = 0;
-
+            if (agentReady())
+            {
+                agent.stoppingDistance = 0;
+            }
         }
     }
     void faceTarget()
@@ -113,22 +176,44 @@ public class enemyAI : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
+        if (hasReportedDeath)                                           // prevents the enemy from being counted twice
+        {
+            return;
+        }
+
         HP -= amount;
-        agent.SetDestination(gamemanager.instance.player.transform.position);
 
         if (HP <= 0)
         {
-            gamemanager.instance.updateGameGoal(-1);
+            hasReportedDeath = true;
+
+            if (gamemanager.instance != null)
+            {
+                gamemanager.instance.updateGameGoal(-1);
+            }
+
             Destroy(gameObject);
-        } 
-        else
-        {
-            StartCoroutine(flashRed());
+            return;
         }
+
+        if (agentReady() &&
+            gamemanager.instance != null &&
+            gamemanager.instance.player != null)
+        {
+            agent.SetDestination(
+                gamemanager.instance.player.transform.position);
+        }
+
+        StartCoroutine(flashRed());
     }
 
     IEnumerator flashRed()
     {
+        if (model == null)
+        {
+            yield break;
+        }
+
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
@@ -196,11 +281,29 @@ public class enemyAI : MonoBehaviour, IDamage
     void shoot()
     {
         shootTimer = 0;
-        if (bullet != null)
+
+        if (bullet != null && shootPos != null)
         {
-            GameObject newBullet = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(playerDir));
+            GameObject newBullet = Instantiate(
+                bullet,
+                shootPos.position,
+                Quaternion.LookRotation(playerDir));
+
+            damage bulletDamage = newBullet.GetComponent<damage>();
+
+            if (bulletDamage == null)
+            {
+                bulletDamage = newBullet.GetComponentInChildren<damage>();
+            }
+
+            if (bulletDamage != null)
+            {
+                bulletDamage.setDamageMultiplier(
+                    waveDamageMultiplier);                              // applies the current wave damage
+            }
 
             Collider bulletCol = newBullet.GetComponent<Collider>();
+
             if (bulletCol != null)
             {
                 foreach (Collider col in GetComponentsInChildren<Collider>())
