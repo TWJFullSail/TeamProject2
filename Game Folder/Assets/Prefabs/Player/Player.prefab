@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1979613610231290795}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.596, y: -0.647, z: 0.642}
+  m_LocalPosition: {x: 1, y: -0.75, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -162,7 +162,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5972d99c0e46da7418617ac782005cf8, type: 3}
   - {fileID: 8300000, guid: ff47832ac5ba27b499d0fae161d46335, type: 3}
   - {fileID: 8300000, guid: c5a6ea366311461458f551dea3243858, type: 3}
-  audJumpVol: 0.3
+  audJumpVol: 0.2
   audHurt:
   - {fileID: 8300000, guid: 40284573c6912af48a63ab185ab4f453, type: 3}
   - {fileID: 8300000, guid: 1014922e5140cf448a9b28d0eead23bb, type: 3}
@@ -170,7 +170,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 67cabcc2d7ff99b46823f6bd54a2a286, type: 3}
   - {fileID: 8300000, guid: d05fa848c2a0193468bddc18ad37a7dd, type: 3}
   - {fileID: 8300000, guid: dc85349079b920c4b910e59b9edee3be, type: 3}
-  audHurtVol: 0.4
+  audHurtVol: 0.2
   audSteps:
   - {fileID: 8300000, guid: b585b3fe9c9f01f458a4f28533d93041, type: 3}
   - {fileID: 8300000, guid: cc31df02c78b92a43a7a7eb9dd15d9b2, type: 3}
@@ -181,22 +181,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3efbb852f475ad34eae8a61d839a3c5e, type: 3}
   - {fileID: 8300000, guid: a76b87d29cb385f468299d4a7f24b370, type: 3}
   - {fileID: 8300000, guid: ecd55514b5fc1e543a8de1bf8fa0c261, type: 3}
-  audStepsVol: 0.3
+  audStepsVol: 0.1
   noAmmo:
   - {fileID: 8300000, guid: 6e19cb68a404b4543b60fc8394f307a9, type: 3}
-  noAmmoVol: 0.3
+  noAmmoVol: 0.1
   reloading:
   - {fileID: 8300000, guid: 8ac7ae1149ef9c64f98d9e9cc9368314, type: 3}
-  reloadingVol: 0.3
+  reloadingVol: 0.1
   noStamina:
-  - {fileID: 8300000, guid: 7a9ef8f3c6b6fe04a8d5c1a98db865af, type: 3}
-  - {fileID: 8300000, guid: edd54b8fd12caa04db01edae2a78e454, type: 3}
-  - {fileID: 8300000, guid: e207efdc8ff247340a6b3ef0e40c2a4d, type: 3}
-  - {fileID: 8300000, guid: 293e5ad8a2634224cb03671706bc604b, type: 3}
-  - {fileID: 8300000, guid: 327cc991f1c622141aacd5bc31ef6976, type: 3}
-  - {fileID: 8300000, guid: 41256a1626dc65d469280f2a8a9ddf45, type: 3}
   - {fileID: 8300000, guid: fa6030c2ec1cb8d449472c4ff0747a0d, type: 3}
-  noStaminaVol: 0.3
+  noStaminaVol: 0.1
   coins: 50
   shopUI: {fileID: 0}
   healthPerUpgrade: 25
@@ -310,7 +304,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9845b38987b69224ca6524623f877af8, type: 2}
+  - {fileID: 2100000, guid: 2531367c848b29e4f9700fa3e9165598, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

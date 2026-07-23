@@ -72,7 +72,7 @@ public class damage : MonoBehaviour
                 break;
             case "range":
                 detectionRadius = value;
-                ApplyDetectionRadius();
+                //ApplyDetectionRadius();
                 break;
             case "blastradius":
                 aoeBlastRadius = value;
@@ -158,8 +158,13 @@ public class damage : MonoBehaviour
             detectionSphere.radius = detectionRadius;
         }
 
+        /*
         if (type == damageType.DOT)
-            ApplyDetectionRadius();
+        {
+            //ApplyDetectionRadius();
+        }
+        /**/
+
     }
 
     public void setDamageMultiplier(float multiplier)
@@ -353,6 +358,8 @@ public class damage : MonoBehaviour
         }
     }
 
+    /*
+     * old code that is interferring with my current FPS hit detection.
     void ApplyDetectionRadius()
     {
         SphereCollider sc = GetComponent<SphereCollider>();
@@ -362,6 +369,7 @@ public class damage : MonoBehaviour
         if (ring != null)
             ring.localScale = new Vector3(detectionRadius * 2f, 0.05f, detectionRadius * 2f);
     }
+    /**/
 
     void ApplyAOERadius()
     {

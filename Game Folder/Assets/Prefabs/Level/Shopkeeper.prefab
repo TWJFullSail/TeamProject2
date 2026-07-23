@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7004214072711221292}
   - component: {fileID: 7278461010597332874}
   - component: {fileID: 1611886649946627913}
+  - component: {fileID: 3768223802631059277}
   m_Layer: 0
   m_Name: Shopkeeper
   m_TagString: ShopNPC
@@ -114,3 +115,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3768223802631059277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5120665838394030541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d137f65b9265e41993761bb3793b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopNPC
+  interactDistance: 3
+  interactKey: 101
+  shopUI: {fileID: 0}

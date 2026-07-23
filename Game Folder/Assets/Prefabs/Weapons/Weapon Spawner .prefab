@@ -95,8 +95,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::weaponSpawner
   weaponList:
-  - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
-  - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
   - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
@@ -196,8 +194,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::weaponSpawner
   weaponList:
   - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
-  - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
-  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
 --- !u!1 &5219829964641988854
@@ -224,7 +220,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5219829964641988854}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -332,8 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::weaponSpawner
   weaponList:
-  - {fileID: 8853294109634429342, guid: 609b5e2a6ac6deb4a90d2345a094e4c0, type: 3}
   - {fileID: 6055214785079213199, guid: 2848265c9890d4a4ab280087a225e022, type: 3}
-  - {fileID: 1606164612921789418, guid: 99bb55f56d3cd5d43ac247c83b18fd93, type: 3}
   weapon: {fileID: 0}
   respawnDelay: 20
