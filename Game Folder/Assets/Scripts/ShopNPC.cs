@@ -31,7 +31,7 @@ public class ShopNPC : MonoBehaviour
         if (dist <= interactDistance && !shopUI.isOpen)
         {
             GUI.Label(new Rect(Screen.width / 2 - 80, Screen.height / 2 + 80, 160, 40),
-                      "Press E to Shop");
+                      "Press Tab to open Shop");
         }
     }
 }

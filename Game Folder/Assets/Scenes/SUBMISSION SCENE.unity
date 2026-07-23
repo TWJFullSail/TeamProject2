@@ -247,6 +247,27 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 149819806862549087, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1253888403957882291, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2639506908097333245, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_text
+      value: 'Buy Health? 20 Coins.
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3848734545989730989, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_text
+      value: 'Buy Stamina? 15 Coins.
+
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 4214455030234885743, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
       propertyPath: coinText
       value: 
@@ -302,6 +323,20 @@ PrefabInstance:
     - target: {fileID: 8230278739611681375, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
       propertyPath: m_Name
       value: ShopUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8592062321430264093, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_text
+      value: 'Buy Ammo? 10 Coins.
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8809265504567592919, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919522194272001171, guid: ba9ee0fc4c134c54bb4db2703d82c423, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1144,6 +1179,10 @@ PrefabInstance:
       propertyPath: shopUI
       value: 
       objectReference: {fileID: 666619768}
+    - target: {fileID: 3768223802631059277, guid: 559dd2692922582429e3125f374aebe5, type: 3}
+      propertyPath: interactKey
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5120665838394030541, guid: 559dd2692922582429e3125f374aebe5, type: 3}
       propertyPath: m_Name
       value: Shopkeeper
@@ -1421,6 +1460,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7698537344165185485, guid: 43b6c88eb85e71c40bac84ad0ef09902, type: 3}
+      propertyPath: menuShop
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7698537344165185485, guid: 43b6c88eb85e71c40bac84ad0ef09902, type: 3}
       propertyPath: menuActive
       value: 
       objectReference: {fileID: 0}
@@ -1640,7 +1683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: ammoPerUpgrade
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: playerCurrency
@@ -1649,6 +1692,10 @@ PrefabInstance:
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: healthPerUpgrade
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: staminaPerUpgrade
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

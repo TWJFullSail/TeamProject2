@@ -10,6 +10,7 @@ public class gamemanager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
+    [SerializeField] public GameObject menuShop;
     [SerializeField] TMP_Text gameGoalCountText;
     public GameObject checkpointPopup;
 
@@ -140,6 +141,23 @@ public class gamemanager : MonoBehaviour
         if (coinText != null)
         {
             coinText.text = "Coins: " + amount;
+        }
+    }
+
+    public void OpenShop()
+    {
+        if (menuShop == null) return;
+
+        statePause();
+        menuActive = menuShop;
+        menuActive.SetActive(true);
+    }
+
+    public void CloseShop()
+    {
+        if (menuActive == menuShop)
+        {
+            stateUnpause();
         }
     }
 }
