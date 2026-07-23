@@ -26,6 +26,10 @@ public class damage : MonoBehaviour
     [SerializeField] float bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
+    int damageAmtOrig;                                                  // stores the original damage
+    float damageMultiplier = 1;
+    bool damageStatsReady;
+
     bool isDamaging;
     Transform pivot;
     float rotationSpeed;
@@ -118,8 +122,12 @@ public class damage : MonoBehaviour
             detectionRadius = weapon.detectionRadius;
             aoeBlastRadius = weapon.aoeBlastRadius;
         }
-        
-        if(type == damageType.bullet)
+
+        damageAmtOrig = damageAmt;
+        damageStatsReady = true;
+        applyDamageMultiplier();
+
+        if (type == damageType.bullet)
         {
             if (rb != null) rb.linearVelocity = transform.forward * bulletSpeed;
             if (bulletDestroyTime > 0)
@@ -154,6 +162,21 @@ public class damage : MonoBehaviour
             ApplyDetectionRadius();
     }
 
+    public void setDamageMultiplier(float multiplier)
+    {
+        damageMultiplier = Mathf.Max(0.01f, multiplier);
+
+        if (damageStatsReady)
+        {
+            applyDamageMultiplier();
+        }
+    }
+
+    void applyDamageMultiplier()
+    {
+        damageAmt = Mathf.Max(1,
+            Mathf.RoundToInt(damageAmtOrig * damageMultiplier));
+    }
 
     void Update()
     {

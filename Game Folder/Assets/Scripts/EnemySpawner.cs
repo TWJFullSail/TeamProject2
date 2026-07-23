@@ -14,6 +14,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float timeBetweenEnemies = 1f;
     [SerializeField] float timeBetweenWaves = 5f;
 
+    [SerializeField] int totalWaves = 3;
+    [SerializeField] float healthIncreasePerWave = 0.25f;
+    [SerializeField] float damageIncreasePerWave = 0.15f;
+
     int currentWave = 1;
 
     void Start()
@@ -23,11 +27,20 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator WaveLoop()
     {
-        while (true)
+        while (currentWave <= totalWaves)
         {
-            Debug.Log("Starting Wave " + currentWave);
+            int enemyCount = startingEnemies + (currentWave - 1);
+            bool finalWave = currentWave == totalWaves;
 
-            yield return StartCoroutine(SpawnWave());
+            gamemanager.instance.startWave(
+                enemyCount,
+                finalWave);                                                 // registers the current wave goal
+
+            Debug.Log(
+                "Starting Wave " + currentWave +
+                " with " + enemyCount + " enemies.");
+
+            yield return StartCoroutine(SpawnWave(enemyCount));
 
             // Wait until every enemy has been defeated
             while (gamemanager.instance.gameGoalCount > 0)
@@ -37,27 +50,53 @@ public class EnemySpawner : MonoBehaviour
 
             Debug.Log("Wave Complete!");
 
+            if (finalWave)
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(timeBetweenWaves);
 
             currentWave++;
 
-            while (gamemanager.instance.gameGoalCount > 0)
-            {
-                Debug.Log("Enemies Remaining: " + gamemanager.instance.gameGoalCount);
-                yield return null;
-            }
+          //  while (gamemanager.instance.gameGoalCount > 0)
+          //  {
+          //      Debug.Log("Enemies Remaining: " + gamemanager.instance.gameGoalCount);
+          //      yield return null;
+          //  }
         }
     }
 
-    IEnumerator SpawnWave()
+    IEnumerator SpawnWave(int enemyCount)
     {
-        int enemyCount = startingEnemies + (currentWave - 1);
+        float healthMultiplier =
+            1f + ((currentWave - 1) * healthIncreasePerWave);
+
+        float damageMultiplier =
+            1f + ((currentWave - 1) * damageIncreasePerWave);
 
         for (int i = 0; i < enemyCount; i++)
         {
             Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            Instantiate(enemyPrefab, spawn.position, spawn.rotation);
+            GameObject enemyInstance =
+                Instantiate(enemyPrefab,spawn.position,spawn.rotation);
+
+            enemyAI enemyScript =
+                enemyInstance.GetComponent<enemyAI>();
+
+            if (enemyScript == null)
+            {
+                enemyScript =
+                    enemyInstance.GetComponentInChildren<enemyAI>();
+            }
+
+            if (enemyScript != null)
+            {
+                enemyScript.setWaveStats(
+                    healthMultiplier,
+                    damageMultiplier);                                      // applies the wave difficulty
+            }
 
             yield return new WaitForSeconds(timeBetweenEnemies);
         }
