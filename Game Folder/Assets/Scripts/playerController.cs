@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static weaponStats;
 
@@ -22,6 +20,8 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
     gunStats currentGun;
     [SerializeField] GameObject gunModel;
+    [SerializeField] LineRenderer laserLine;
+    [SerializeField] Transform laserPos;
 
     [SerializeField] AudioClip[] audJump;
     [Range(0, 1)][SerializeField] float audJumpVol;
@@ -29,6 +29,12 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(0, 1)][SerializeField] float audHurtVol;
     [SerializeField] AudioClip[] audSteps;
     [Range(0, 1)][SerializeField] float audStepsVol;
+    [SerializeField] AudioClip[] noAmmo;
+    [Range(0, 1)][SerializeField] float noAmmoVol;
+    [SerializeField] AudioClip[] reloading;
+    [Range(0, 1)][SerializeField] float reloadingVol;
+    [SerializeField] AudioClip[] noStamina;
+    [Range(0, 1)][SerializeField] float noStaminaVol;
 
     //Old idea for "Bullet Heaven multiple weapon system abandoned
     /*
@@ -49,6 +55,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     float shootTimer;
 
     bool isSprinting;
+    bool isBreating;
     bool isPlayingSteps;
 
     Vector3 moveDir;
@@ -86,13 +93,25 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
 
         sprint();
         jump();
+
         controller.Move(playerVel * Time.deltaTime);
         playerVel.y -= gravity * Time.deltaTime;        
 
         shootTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1") && gunInv.Count > 0 && currentGun.ammoCur > 0 && shootTimer > currentGun.shootRate)
+        if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > currentGun.shootRate)
         {
-            shoot();
+            if (currentGun.ammoCur > 0)
+            {
+                shoot();
+            }
+            else
+            {
+                audioManager.instance.audPlayer.PlayOneShot(noAmmo[Random.Range(0, noAmmo.Length)], noAmmoVol);
+            }
+        }
+        else
+        {
+            laserLine.enabled = false;
         }
 
         selectGun();
@@ -103,7 +122,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if(Input.GetButtonDown("Sprint") && Stamina > 0) {
             speed *= sprintMod;
-            isSprinting = true;
+            isSprinting = true;                           
         }
         else if(Input.GetButtonUp("Sprint")) {
             speed /= sprintMod;
@@ -120,7 +139,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         if (isSprinting)
         {
             yield return new WaitForSeconds(0.3f);
-            if (Stamina > 0)
+            if (Stamina > 1)
             {
                 Stamina--;
                 updatePlayerStamina();
@@ -138,14 +157,32 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         isPlayingSteps = false;
     }
 
+    IEnumerator playBreathing()
+    {
+        isBreating = true;
+        while (Stamina < 5)
+        {
+            audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
+            yield return new WaitForSeconds(0.3f);
+        }
+        while (Stamina < 15)
+        {
+            audioManager.instance.audPlayer.PlayOneShot(noStamina[Random.Range(0, noStamina.Length)], noStaminaVol);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        isBreating = false;
+    }
+
     void jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && Stamina >= 10)
         {
+            audioManager.instance.audPlayer.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
             playerVel.y = jumpSpeed;
             jumpCount++;
             Stamina -= 10;
-            updatePlayerStamina();
+            updatePlayerStamina();                        
         }
     }
 
@@ -178,6 +215,22 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
                     dmg.takeDamage(currentGun.shootDamage);
                 }
             }
+
+            if (currentGun.isLaser)
+            {
+                if (Physics.Raycast(laserPos.position, laserPos.forward, out hit, currentGun.shootDist))
+                {
+                    laserLine.SetPosition(0, laserPos.position);
+                    laserLine.SetPosition(1, hit.point);
+                }
+                else
+                {
+                    laserLine.SetPosition(0, laserPos.position);
+                    laserLine.SetPosition(1, laserPos.position + laserPos.forward * currentGun.shootDist);
+                }
+
+                laserLine.enabled = true;
+            }            
         }
     }
 
@@ -185,6 +238,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         if (Input.GetButtonDown("Reload") && currentGun != null && currentGun.ammoCur < currentGun.clipSize && currentGun.ammoTotal > 0)
         {
+            audioManager.instance.audPlayer.PlayOneShot(reloading[Random.Range(0, reloading.Length)], reloadingVol);
             int missing = currentGun.clipSize - currentGun.ammoCur;
             if (currentGun.ammoTotal > missing)
             {
@@ -230,6 +284,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     {
         gamemanager.instance.playerStaminaBar.fillAmount = (float)Stamina / StaminaOrig;
         gamemanager.instance.playerStaminaText.text = Stamina.ToString("F00") + " / " + StaminaOrig.ToString("F00");
+        if (Stamina < 15 && !isBreating)
+        {
+            StartCoroutine(playBreathing());
+        }
     }
 
     public void updateAmmoUI()
