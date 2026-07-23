@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ShopUI : MonoBehaviour
@@ -9,12 +8,11 @@ public class ShopUI : MonoBehaviour
     public TextMeshProUGUI coinText;
 
     [Header("Interaction")]
-    public KeyCode closeKey = KeyCode.E;
     public float interactDistance = 5f;
 
     playerController player;
     Transform playerTransform;
-    bool isOpen = false;
+    public bool isOpen = false;          
 
     void Start()
     {
@@ -30,7 +28,7 @@ public class ShopUI : MonoBehaviour
     {
         if (isOpen)
         {
-            if (Input.GetKeyDown(closeKey) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseShop();
             }
@@ -49,27 +47,49 @@ public class ShopUI : MonoBehaviour
 
     public void OpenShop()
     {
-        if (player == null) return;
+        if (player == null || shopPanel == null) return;
 
         isOpen = true;
         shopPanel.SetActive(true);
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Time.timeScale = 0f;
+
+        gamemanager gm = gamemanager.instance;
+        if (gm != null)
+        {
+            gm.statePause();
+            gm.menuActive = shopPanel;       
+        }
 
         UpdateCoinDisplay();
     }
 
     public void CloseShop()
     {
+        if (shopPanel == null) return;
+
         isOpen = false;
         shopPanel.SetActive(false);
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Time.timeScale = 1f;
-    }
 
-    public bool IsOpen => isOpen;
+        
+        if (gamemanager.instance != null)
+        {
+            gamemanager.instance.isPaused = false;
+            Time.timeScale = gamemanager.instance.timeScaleOrig;   
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+           
+            if (gamemanager.instance.menuActive == shopPanel)
+            {
+                gamemanager.instance.menuActive = null;
+            }
+        }
+    }
 
     public void BuyHealth() => player?.BuyHealthUpgrade();
     public void BuyStamina() => player?.BuyStaminaUpgrade();
@@ -79,22 +99,5 @@ public class ShopUI : MonoBehaviour
     {
         if (coinText != null && player != null)
             coinText.text = $"Coins: {player.coins}";
-    }
-
-    void OnGUI()
-    {
-        if (isOpen || playerTransform == null) return;
-
-        float dist = Vector3.Distance(playerTransform.position, transform.position);
-        if (dist <= interactDistance)
-        {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 24;
-            style.normal.textColor = Color.white;
-            style.alignment = TextAnchor.MiddleCenter;
-
-            GUI.Label(new Rect(Screen.width / 2 - 120, Screen.height / 2 + 100, 240, 50),
-                      "Press E to Open Shop", style);
-        }
     }
 }

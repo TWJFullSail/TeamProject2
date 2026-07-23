@@ -77,7 +77,7 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         {
             movement();
 
-            if (shopUI != null && !shopUI.IsOpen)
+            if (shopUI != null && !shopUI.isOpen)
             {
                 Collider[] hits = Physics.OverlapSphere(transform.position, 4f);
                 foreach (var hit in hits)
