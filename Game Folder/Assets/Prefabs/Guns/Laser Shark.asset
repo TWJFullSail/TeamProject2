@@ -25,3 +25,4 @@ MonoBehaviour:
   shootSound:
   - {fileID: 8300000, guid: 1cca2d7d5e5239543aea7f78103d4cea, type: 3}
   shootSoundVol: 0.2
+  isLaser: 1
