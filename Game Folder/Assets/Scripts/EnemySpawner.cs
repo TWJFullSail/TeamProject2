@@ -18,6 +18,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float healthIncreasePerWave = 0.25f;
     [SerializeField] float damageIncreasePerWave = 0.15f;
 
+    [Header("Coin Spawner Integration")]
+    [SerializeField] CoinSpawner coinSpawner;
+
     int currentWave = 1;
 
     void Start()
@@ -33,6 +36,9 @@ public class EnemySpawner : MonoBehaviour
             enabled = false;
             return;
         }
+
+        if (coinSpawner == null)
+            coinSpawner = FindAnyObjectByType<CoinSpawner>();
 
         StartCoroutine(WaveLoop());
     }
@@ -54,6 +60,10 @@ public class EnemySpawner : MonoBehaviour
 
             yield return StartCoroutine(SpawnWave(enemyCount));
 
+            if (coinSpawner != null)
+            {
+                coinSpawner.OnWaveStart();
+            }
             // Wait until every enemy has been defeated
             while (gamemanager.instance.gameGoalCount > 0)
             {

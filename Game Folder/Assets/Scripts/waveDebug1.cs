@@ -8,7 +8,7 @@ public class waveDebug : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             enemyAI enemy =
-                FindFirstObjectByType<enemyAI>();
+                FindAnyObjectByType<enemyAI>();
 
             if (enemy != null)
             {
@@ -20,7 +20,7 @@ public class waveDebug : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             enemyAI enemy =
-                FindFirstObjectByType<enemyAI>();
+                FindAnyObjectByType<enemyAI>();
 
             if (enemy != null)
             {
