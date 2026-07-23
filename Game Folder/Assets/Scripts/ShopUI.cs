@@ -37,11 +37,16 @@ public class ShopUI : MonoBehaviour
             return;
         }
 
+        // Allow opening shop only if no menu is active or if it's the shop itself
         if (playerController != null)
         {
             float dist = Vector3.Distance(playerController.transform.position, transform.position);
             if (dist <= interactDistance && Input.GetKeyDown(KeyCode.E))
-                OpenShop();
+            {
+                // Only open if no other menu is open or if shop is already the active one
+                if (gamemanager.instance.menuActive == null || gamemanager.instance.menuActive == shopPanel)
+                    OpenShop();
+            }
         }
     }
 
@@ -52,15 +57,9 @@ public class ShopUI : MonoBehaviour
         isOpen = true;
         shopPanel.SetActive(true);
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
         var gm = gamemanager.instance;
-        if (gm != null)
-        {
-            gm.statePause();
-            gm.menuActive = shopPanel;
-        }
+        gm.statePause();
+        gm.menuActive = shopPanel;
 
         UpdateCoinDisplay();
     }
@@ -72,16 +71,8 @@ public class ShopUI : MonoBehaviour
         isOpen = false;
         shopPanel.SetActive(false);
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         var gm = gamemanager.instance;
-        if (gm != null)
-        {
-            gm.isPaused = false;
-            Time.timeScale = gm.timeScaleOrig;
-            gm.menuActive = null;
-        }
+        gm.stateUnpause();
     }
 
     // ====================== PURCHASES ======================
@@ -95,15 +86,9 @@ public class ShopUI : MonoBehaviour
 
         switch (methodName)
         {
-            case "BuyHealthUpgrade":
-                controller.BuyHealthUpgrade();
-                break;
-            case "BuyStaminaUpgrade":
-                controller.BuyStaminaUpgrade();
-                break;
-            case "BuyAmmoUpgrade":
-                controller.BuyAmmoUpgrade();
-                break;
+            case "BuyHealthUpgrade": controller.BuyHealthUpgrade(); break;
+            case "BuyStaminaUpgrade": controller.BuyStaminaUpgrade(); break;
+            case "BuyAmmoUpgrade": controller.BuyAmmoUpgrade(); break;
         }
 
         UpdateCoinDisplay();
@@ -130,9 +115,8 @@ public class ShopUI : MonoBehaviour
 
     private IEnumerator ClearFeedbackAfterDelay()
     {
-        yield return new WaitForSeconds(2.2f);
-        if (feedbackText != null)
-            feedbackText.text = "";
+        yield return new WaitForSeconds(2f);
+        if (feedbackText != null) feedbackText.text = "";
     }
 
     private void OnDestroy()
