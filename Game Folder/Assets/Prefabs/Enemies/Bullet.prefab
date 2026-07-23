@@ -153,10 +153,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8469e3362175e84db3deb23acf90a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::damage
+  weapon: {fileID: 0}
   type: 0
   rb: {fileID: 8424531347554407198}
   damageAmt: 10
   damageRate: 0
-  bulletSpeed: 20
-  bulletDestroyTime: 3
+  destroyOnHit: 0
+  bulletSpeed: 15
+  bulletDestroyTime: 2
   hitEffect: {fileID: 0}
+  projectilePrefab: {fileID: 0}

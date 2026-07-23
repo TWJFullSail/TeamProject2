@@ -119,11 +119,121 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &298912931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 298912933}
+  - component: {fileID: 298912932}
+  m_Layer: 0
+  m_Name: CoinSpawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &298912932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298912931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dabd3277b1de864d98f46d2998ca6b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinSpawner
+  coinPrefab: {fileID: 1984485850}
+  spawnInterval: 2.2
+  spawnOnWaveStart: 1
+  coinsPerWaveBurst: 50
+  spawnRadius: 100
+  minHeight: 2
+  maxHeight: 4
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  maxCoinsAlive: 50
+--- !u!4 &298912933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298912931}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &354109292 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3917266751791872017, guid: 43b6c88eb85e71c40bac84ad0ef09902, type: 3}
   m_PrefabInstance: {fileID: 2015649759}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &489398371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 489398373}
+  - component: {fileID: 489398372}
+  m_Layer: 0
+  m_Name: CoinSpawner (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &489398372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489398371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dabd3277b1de864d98f46d2998ca6b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinSpawner
+  coinPrefab: {fileID: 1984485850}
+  spawnInterval: 2.2
+  spawnOnWaveStart: 1
+  coinsPerWaveBurst: 50
+  spawnRadius: 100
+  minHeight: 2
+  maxHeight: 4
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  maxCoinsAlive: 50
+--- !u!4 &489398373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489398371}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &565782128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3577457717886361639, guid: 0ffaa7aa2d1a6734d950cb9c90295a5e, type: 3}
@@ -304,8 +414,12 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6866050979240447758, guid: adb79762c6e2e044fa61e5e6006212e3, type: 3}
+      propertyPath: lifetime
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 6866050979240447758, guid: adb79762c6e2e044fa61e5e6006212e3, type: 3}
       propertyPath: spinSpeed
-      value: 15
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 9158054978998857368, guid: adb79762c6e2e044fa61e5e6006212e3, type: 3}
       propertyPath: m_Name
@@ -940,8 +1054,8 @@ MonoBehaviour:
   spawnOnWaveStart: 1
   coinsPerWaveBurst: 50
   spawnRadius: 100
-  minHeight: 1
-  maxHeight: 3
+  minHeight: 2
+  maxHeight: 4
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -1502,13 +1616,45 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: coins
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: shopUI
       value: 
       objectReference: {fileID: 666619768}
     - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: Stamina
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: jumpSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: sprintMod
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: StaminaRate
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: ammoPerUpgrade
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
       propertyPath: playerCurrency
       value: 
       objectReference: {fileID: 840203971}
+    - target: {fileID: 6247687177390540486, guid: 762cba55f0b4eb048ad29e18b9046dae, type: 3}
+      propertyPath: healthPerUpgrade
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1591,3 +1737,5 @@ SceneRoots:
   - {fileID: 1873590306}
   - {fileID: 2015649759}
   - {fileID: 1747546842}
+  - {fileID: 298912933}
+  - {fileID: 489398373}

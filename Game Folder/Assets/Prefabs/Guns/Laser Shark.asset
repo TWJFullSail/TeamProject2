@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::gunStats
   gunModel: {fileID: 1606164612921789418, guid: 75a06fe93c4785046bbac91702309505, type: 3}
   projectile: {fileID: 0}
-  shootDamage: 3
+  shootDamage: 6
   shootDist: 100
   shootRate: 0.25
-  ammoCur: 0
+  ammoCur: 13
   ammoTotal: 0
   clipSize: 50
   clipMax: 5

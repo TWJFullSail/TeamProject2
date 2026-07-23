@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::gunStats
   gunModel: {fileID: 5478237379972570025, guid: 9f8284bdf86462c4882248beed2e3eeb, type: 3}
   projectile: {fileID: 5478237379972570025, guid: 2c2dc43f07c5f9647bd6f430af17558a, type: 3}
-  shootDamage: 1
+  shootDamage: 5
   shootDist: 50
   shootRate: 1.5
-  ammoCur: 0
-  ammoTotal: 0
+  ammoCur: 1
+  ammoTotal: 5
   clipSize: 5
   clipMax: 3
   hitEffect: {fileID: 0}
   shootSound:
   - {fileID: 8300000, guid: 70991fa5b87d16f44b27710a4d124b6f, type: 3}
   shootSoundVol: 0.2
+  isLaser: 0

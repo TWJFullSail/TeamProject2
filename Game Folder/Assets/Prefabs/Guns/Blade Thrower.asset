@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::gunStats
   gunModel: {fileID: 3595098310066855455, guid: 560896b8eb5e68044985c64a9a80600c, type: 3}
   projectile: {fileID: 3595098310066855455, guid: c18a86ba1b96aea4eb38ed31cfdb1bcd, type: 3}
-  shootDamage: 1
+  shootDamage: 7
   shootDist: 5
   shootRate: 0.75
   ammoCur: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   shootSound:
   - {fileID: 8300000, guid: 10127beee06c6a74397177429d6ad0ef, type: 3}
   shootSoundVol: 0.1
+  isLaser: 0
