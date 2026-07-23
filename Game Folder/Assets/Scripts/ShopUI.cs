@@ -1,27 +1,31 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class ShopUI : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject shopPanel;
-    public TextMeshProUGUI coinText;
+    [SerializeField] private GameObject shopPanel;
+    [SerializeField] private TextMeshProUGUI coinText;
+    [SerializeField] private TextMeshProUGUI feedbackText;
 
     [Header("Interaction")]
-    public float interactDistance = 5f;
+    [SerializeField] private float interactDistance = 5f;
 
-    playerController player;
-    Transform playerTransform;
-    public bool isOpen = false;          
+    private PlayerCurrency playerCurrency;
+    private playerController playerController;
+    public bool isOpen = false;
 
     void Start()
     {
-        player = FindAnyObjectByType<playerController>();
-        if (player != null)
-            playerTransform = player.transform;
+        playerCurrency = FindAnyObjectByType<PlayerCurrency>();
+        playerController = FindAnyObjectByType<playerController>();
 
         if (shopPanel != null)
             shopPanel.SetActive(false);
+
+        if (playerCurrency != null)
+            playerCurrency.OnCoinsChanged.AddListener(UpdateCoinDisplay);
     }
 
     void Update()
@@ -29,25 +33,21 @@ public class ShopUI : MonoBehaviour
         if (isOpen)
         {
             if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape))
-            {
                 CloseShop();
-            }
             return;
         }
 
-        if (playerTransform != null &&
-            Vector3.Distance(playerTransform.position, transform.position) <= interactDistance)
+        if (playerController != null)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
+            float dist = Vector3.Distance(playerController.transform.position, transform.position);
+            if (dist <= interactDistance && Input.GetKeyDown(KeyCode.E))
                 OpenShop();
-            }
         }
     }
 
     public void OpenShop()
     {
-        if (player == null || shopPanel == null) return;
+        if (playerCurrency == null || shopPanel == null) return;
 
         isOpen = true;
         shopPanel.SetActive(true);
@@ -55,11 +55,11 @@ public class ShopUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        gamemanager gm = gamemanager.instance;
+        var gm = gamemanager.instance;
         if (gm != null)
         {
             gm.statePause();
-            gm.menuActive = shopPanel;       
+            gm.menuActive = shopPanel;
         }
 
         UpdateCoinDisplay();
@@ -75,29 +75,69 @@ public class ShopUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        
-        if (gamemanager.instance != null)
+        var gm = gamemanager.instance;
+        if (gm != null)
         {
-            gamemanager.instance.isPaused = false;
-            Time.timeScale = gamemanager.instance.timeScaleOrig;   
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-
-           
-            if (gamemanager.instance.menuActive == shopPanel)
-            {
-                gamemanager.instance.menuActive = null;
-            }
+            gm.isPaused = false;
+            Time.timeScale = gm.timeScaleOrig;
+            gm.menuActive = null;
         }
     }
 
-    public void BuyHealth() => player?.BuyHealthUpgrade();
-    public void BuyStamina() => player?.BuyStaminaUpgrade();
-    public void BuyAmmo() => player?.BuyAmmoUpgrade();
+    // ====================== PURCHASES ======================
+    public void BuyHealth() => TryPurchase(playerController, "BuyHealthUpgrade");
+    public void BuyStamina() => TryPurchase(playerController, "BuyStaminaUpgrade");
+    public void BuyAmmo() => TryPurchase(playerController, "BuyAmmoUpgrade");
 
-    public void UpdateCoinDisplay()
+    private void TryPurchase(playerController controller, string methodName)
     {
-        if (coinText != null && player != null)
-            coinText.text = $"Coins: {player.coins}";
+        if (controller == null) return;
+
+        switch (methodName)
+        {
+            case "BuyHealthUpgrade":
+                controller.BuyHealthUpgrade();
+                break;
+            case "BuyStaminaUpgrade":
+                controller.BuyStaminaUpgrade();
+                break;
+            case "BuyAmmoUpgrade":
+                controller.BuyAmmoUpgrade();
+                break;
+        }
+
+        UpdateCoinDisplay();
+    }
+
+    public void UpdateCoinDisplay(int currentCoins = -1)
+    {
+        if (coinText != null)
+        {
+            int coins = currentCoins >= 0 ? currentCoins : (playerCurrency != null ? playerCurrency.Coins : 0);
+            coinText.text = $"Coins: {coins}";
+        }
+    }
+
+    public void ShowNotEnoughCoins(string itemName)
+    {
+        if (feedbackText != null)
+        {
+            feedbackText.text = $"Not enough coins for {itemName}!";
+            feedbackText.color = Color.red;
+            StartCoroutine(ClearFeedbackAfterDelay());
+        }
+    }
+
+    private IEnumerator ClearFeedbackAfterDelay()
+    {
+        yield return new WaitForSeconds(2.2f);
+        if (feedbackText != null)
+            feedbackText.text = "";
+    }
+
+    private void OnDestroy()
+    {
+        if (playerCurrency != null)
+            playerCurrency.OnCoinsChanged.RemoveListener(UpdateCoinDisplay);
     }
 }

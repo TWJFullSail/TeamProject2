@@ -3,22 +3,24 @@ using UnityEngine.Events;
 
 public class PlayerCurrency : MonoBehaviour
 {
-    public int coins = 0;
+    [SerializeField] private int _coins = 0;
+
+    public int Coins => _coins;
+
     public UnityEvent<int> OnCoinsChanged;
 
     public void AddCoins(int amount)
     {
-        coins += amount;
-        OnCoinsChanged?.Invoke(coins);
+        if (amount <= 0) return;
+        _coins += amount;
+        OnCoinsChanged?.Invoke(_coins);
     }
+
     public bool SpendCoins(int amount)
     {
-        if (coins >= amount)
-        {
-            coins -= amount;
-            OnCoinsChanged?.Invoke(coins);
-            return true;
-        }
-        return false;
+        if (amount <= 0 || _coins < amount) return false;
+        _coins -= amount;
+        OnCoinsChanged?.Invoke(_coins);
+        return true;
     }
 }

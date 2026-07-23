@@ -37,15 +37,18 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
     [Range(0, 1)][SerializeField] float noStaminaVol;
 
     [Header("=== SHOP & CURRENCY ===")]
-    public int coins = 0;
     [SerializeField] ShopUI shopUI;
+
+    [SerializeField] private PlayerCurrency playerCurrency;
+
     int healthUpgradeCost = 20;
     int staminaUpgradeCost = 15;
     int ammoUpgradeCost = 12;
-    // How much each upgrade gives
     [SerializeField] int healthPerUpgrade = 25;
     [SerializeField] int staminaPerUpgrade = 20;
     [SerializeField] int ammoPerUpgrade = 30;
+
+    public int coins = 0;
 
     //Old idea for "Bullet Heaven multiple weapon system abandoned
     /*
@@ -290,7 +293,6 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerHP();
         updatePlayerStamina();
         updateAmmoUI();
-        gamemanager.instance.UpdateCoinUI(coins);
     }
 
     public void updatePlayerHP()
@@ -391,22 +393,21 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         updatePlayerUI();
     }
 
+    // ====================== CURRENCY ======================
     public void AddCoins(int amount)
     {
-        coins += amount;
-        gamemanager.instance.UpdateCoinUI(coins);   // ← we'll create this
+        if (playerCurrency != null)
+            playerCurrency.AddCoins(amount);
     }
 
     public bool SpendCoins(int amount)
     {
-        if (coins >= amount)
-        {
-            coins -= amount;
-            gamemanager.instance.UpdateCoinUI(coins);
-            return true;
-        }
+        if (playerCurrency != null)
+            return playerCurrency.SpendCoins(amount);
         return false;
     }
+
+    // ====================== UPGRADES ======================
     public void BuyHealthUpgrade()
     {
         if (SpendCoins(healthUpgradeCost))
@@ -416,7 +417,12 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             healthUpgradeCost = Mathf.RoundToInt(healthUpgradeCost * 1.45f);
             updatePlayerHP();
         }
+        else
+        {
+            shopUI?.ShowNotEnoughCoins("Health Upgrade");
+        }
     }
+
     public void BuyStaminaUpgrade()
     {
         if (SpendCoins(staminaUpgradeCost))
@@ -426,6 +432,10 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
             staminaUpgradeCost = Mathf.RoundToInt(staminaUpgradeCost * 1.4f);
             updatePlayerStamina();
         }
+        else
+        {
+            shopUI?.ShowNotEnoughCoins("Stamina Upgrade");
+        }
     }
 
     public void BuyAmmoUpgrade()
@@ -434,12 +444,14 @@ public class playerController : MonoBehaviour, IDamage, IPickupGun
         {
             currentGun.clipMax += 1;
             currentGun.ammoTotal += currentGun.clipSize;
-
             currentGun.ammoCur = Mathf.Min(currentGun.ammoCur + ammoPerUpgrade, currentGun.clipSize);
 
             ammoUpgradeCost = Mathf.RoundToInt(ammoUpgradeCost * 1.35f);
             updateAmmoUI();
-
+        }
+        else if (shopUI != null)
+        {
+            shopUI.ShowNotEnoughCoins("Ammo Upgrade");
         }
     }
 
