@@ -10,6 +10,7 @@ public class gamemanager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
+    [SerializeField] public GameObject menuShop;
     [SerializeField] TMP_Text gameGoalCountText;
     public GameObject checkpointPopup;
 
@@ -143,6 +144,7 @@ public class gamemanager : MonoBehaviour
         }
     }
 
+
     public void quitGame()
     {
 #if UNITY_EDITOR
@@ -150,5 +152,25 @@ public class gamemanager : MonoBehaviour
 #else
     Application.Quit();
 #endif
+    }
+
+    public void OpenShop()
+    {
+        if (menuShop == null)
+        {
+            return;
+        }
+
+        statePause();
+        menuActive = menuShop;
+        menuActive.SetActive(true);
+    }
+
+    public void CloseShop()
+    {
+        if (menuActive == menuShop)
+        {
+            stateUnpause();
+        }
     }
 }
