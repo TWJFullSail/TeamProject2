@@ -138,4 +138,13 @@ public class gamemanager : MonoBehaviour
             coinText.text = "Coins: " + amount;
         }
     }
+
+    public void quitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
 }
