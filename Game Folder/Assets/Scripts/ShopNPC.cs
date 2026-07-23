@@ -25,9 +25,13 @@ public class ShopNPC : MonoBehaviour
     }
     void OnGUI()
     {
-        if (playerInRange && !shopUI.IsOpen)
+        if (shopUI == null) return;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= interactDistance && !shopUI.isOpen)
         {
-            GUI.Label(new Rect(Screen.width / 2 - 60, Screen.height / 2 + 50, 120, 30), "Press E to Shop");
+            GUI.Label(new Rect(Screen.width / 2 - 80, Screen.height / 2 + 80, 160, 40),
+                      "Press E to Shop");
         }
     }
 }
