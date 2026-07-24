@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
 
             gamemanager.instance.startWave(
                 enemyCount,
-                finalWave);                                                 // registers the current wave goal
+                finalWave);                                             
 
             if (waveDisplay != null)
             {
@@ -170,7 +170,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 enemyScript.setWaveStats(
                     healthMultiplier,
-                    damageMultiplier);                                      // applies the wave difficulty
+                    damageMultiplier);                                      
             }
 
             yield return new WaitForSeconds(timeBetweenEnemies);

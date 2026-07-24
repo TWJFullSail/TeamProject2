@@ -26,7 +26,7 @@ public class damage : MonoBehaviour
     [SerializeField] float bulletDestroyTime;
     [SerializeField] ParticleSystem hitEffect;
 
-    int damageAmtOrig;                                                  // stores the original damage
+    int damageAmtOrig;                                                  
     float damageMultiplier = 1;
     bool damageStatsReady;
 
@@ -357,19 +357,6 @@ public class damage : MonoBehaviour
             Instantiate(projectilePrefab, spawnPos, Quaternion.LookRotation(dir));
         }
     }
-
-    /*
-     * old code that is interferring with my current FPS hit detection.
-    void ApplyDetectionRadius()
-    {
-        SphereCollider sc = GetComponent<SphereCollider>();
-        if (sc != null) sc.radius = detectionRadius;
-
-        Transform ring = transform.Find("CloudRing");
-        if (ring != null)
-            ring.localScale = new Vector3(detectionRadius * 2f, 0.05f, detectionRadius * 2f);
-    }
-    /**/
 
     void ApplyAOERadius()
     {

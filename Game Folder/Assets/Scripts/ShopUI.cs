@@ -37,13 +37,11 @@ public class ShopUI : MonoBehaviour
             return;
         }
 
-        // Allow opening shop only if no menu is active or if it's the shop itself
         if (playerController != null)
         {
             float dist = Vector3.Distance(playerController.transform.position, transform.position);
             if (dist <= interactDistance && Input.GetKeyDown(KeyCode.E))
             {
-                // Only open if no other menu is open or if shop is already the active one
                 if (gamemanager.instance.menuActive == null || gamemanager.instance.menuActive == shopPanel)
                     OpenShop();
             }

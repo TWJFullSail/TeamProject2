@@ -33,7 +33,7 @@ public class gamemanager : MonoBehaviour
 
     public int gameGoalCount;
 
-    bool isFinalWave = true;												// keeps the current single wave working
+    bool isFinalWave = true;											
 
     void Awake()
     {
@@ -88,7 +88,7 @@ public class gamemanager : MonoBehaviour
         gameGoalCount = Mathf.Max(0, amount);
         isFinalWave = finalWave;
 
-        updateGameGoalText();                                           // displays the new enemy total
+        updateGameGoalText();                                           
     }
 
     public void updateGameGoal(int amount)

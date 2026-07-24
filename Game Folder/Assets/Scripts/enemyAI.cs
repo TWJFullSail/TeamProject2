@@ -86,7 +86,7 @@ public class enemyAI : MonoBehaviour, IDamage
         damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
 
         HP = Mathf.Max(1,
-            Mathf.RoundToInt(HPOrig * healthMultiplier));                   // applies wave health scaling
+            Mathf.RoundToInt(HPOrig * healthMultiplier));          
 
         waveDamageMultiplier = damageMultiplier;
 
@@ -144,7 +144,7 @@ public class enemyAI : MonoBehaviour, IDamage
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(
-     ranPos, out hit, roamDist, NavMesh.AllAreas))                  // confirms a valid NavMesh position
+     ranPos, out hit, roamDist, NavMesh.AllAreas))                 
         {
             agent.SetDestination(hit.position);
         }
@@ -176,7 +176,7 @@ public class enemyAI : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
-        if (hasReportedDeath)                                           // prevents the enemy from being counted twice
+        if (hasReportedDeath)                                   
         {
             return;
         }
@@ -299,7 +299,7 @@ public class enemyAI : MonoBehaviour, IDamage
             if (bulletDamage != null)
             {
                 bulletDamage.setDamageMultiplier(
-                    waveDamageMultiplier);                              // applies the current wave damage
+                    waveDamageMultiplier);                             
             }
 
             Collider bulletCol = newBullet.GetComponent<Collider>();

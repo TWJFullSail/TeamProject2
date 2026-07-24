@@ -7,7 +7,7 @@ public class CoinUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
 
     [Header("Style")]
-    [SerializeField] private Color normalColor = new Color(1f, 0.9f, 0.3f); // Gold
+    [SerializeField] private Color normalColor = new Color(1f, 0.9f, 0.3f); 
     [SerializeField] private Color flashColor = Color.white;
 
     private PlayerCurrency playerCurrency;
